@@ -18,6 +18,7 @@ function App() {
           Learn React <br></br>
         </a>
         <h1>No funke det faenmæ, endelig !!!!</h1>
+        <h2>Prøve en ny push, plis funk igjen</h2>
       </header>
     </div>
   );
