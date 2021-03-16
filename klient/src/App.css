@@ -1,0 +1,16 @@
+.chatbox {
+    display: flex; 
+}
+
+.App {
+    display: block;
+    margin : 0 auto;
+}
+
+.h100 {
+    height: 100%;
+}
+
+.w100 {
+    width: 100%;
+}
