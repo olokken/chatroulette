@@ -38,7 +38,7 @@ const Login = () => {
   }
 
   const onLogin = () => {
-    history.push('/');
+    history.push('/chat');
   }
 
   return (

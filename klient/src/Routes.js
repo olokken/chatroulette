@@ -5,7 +5,7 @@ import Chat from './containers/Chat';
 
 export default (
   <Switch>
-    <Route exact path="/login" component={Login} />
-    <Route exact path="/" component={Chat} />
+    <Route exact path="/" component={Login} />
+    <Route exact path="/chat" component={Chat} />
   </Switch>
 );
