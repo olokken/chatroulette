@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TextField, Button, Grid } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 
 const StyledDiv = styled.div`
   border-right: solid yellow 1px;
@@ -20,6 +20,11 @@ const StyledSearchBar = styled.input`
 
 const StyledUsers = styled.div`
   margin-top: 20px;
+`;
+
+const StyledUser = styled.div`
+  background-color: black;
+  width: 100px;
 `;
 
 const OnlineUsers = props => {

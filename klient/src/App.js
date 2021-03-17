@@ -1,13 +1,20 @@
-import React from 'react';
+import React , { useState, createContext }from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 import Routes from './Routes';
 
+export const AuthContext = createContext({
+  authState: null,
+  setAuthState: () => {}
+  });
+
 function App() {
+  const [authState, setAuthState] = useState({username: null, stunServerInfo: null}); 
+
   return (
-    <BrowserRouter>
+    <BrowserRouter >
       <div className="App">
-        {Routes}
+        <AuthContext.Provider value={{authState, setAuthState}}>{Routes}</AuthContext.Provider>
       </div>
     </BrowserRouter>
   );
