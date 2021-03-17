@@ -15,7 +15,6 @@ const LoginContainer = styled.div`
 
 const Login = () => {
   const [username, setUsername] = useState(''); 
-  const [stunServerInfo, setStunServerInfo] = useState('Dette er info fra stunserveren :-)');
   const {setAuthState} = useContext(AuthContext); 
   const history = useHistory();
 
@@ -24,7 +23,7 @@ const Login = () => {
   }
 
   const onLogin = () => {
-    setAuthState({username: username, stunServerInfo: stunServerInfo}); 
+    setAuthState({username: username}); 
     history.push('/chat');
   }
 

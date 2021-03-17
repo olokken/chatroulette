@@ -14,12 +14,15 @@ const Chat = () => {
     socketRef.current = io.connect('/'); 
 
     socketRef.current.on('connect', () => {
-      socketRef.current.emit('message', authState.username, authState.stunServerInfo);
+      socketRef.current.emit('message', authState.username);
     }); 
 
     socketRef.current.on('message', (data) => {
-      setOnlineUsers(data)
+      console.log(data);
     })
+
+    /*socketRef.current.emit('privateMessage', {"sessionID":{sessionID}, "offer": {offer}});*/
+
 
     /*socketRef.current.on('close', () => {
       socketRef.current.emit('dis', "Beskjed fra kleiten at den disconnecter"); 

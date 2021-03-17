@@ -9,7 +9,7 @@ export const AuthContext = createContext({
   });
 
 function App() {
-  const [authState, setAuthState] = useState({username: null, stunServerInfo: null}); 
+  const [authState, setAuthState] = useState({username: null}); 
 
   return (
     <BrowserRouter >
