@@ -11,7 +11,7 @@ const Chat = () => {
   let offer;
 
 
-  var socket = io('http://localhost:8001', {
+  var socket = io('https://chatroulette123.herokuapp.com/:8001', {
     transports: ["websocket", "polling"]
   }); 
 
