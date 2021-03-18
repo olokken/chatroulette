@@ -19,22 +19,24 @@ def newConnected(username, sessionID):
     x = {"name": username, "sessionID": sessionID}
     connected.append(x)
 
-def client_disconnect(user):
+def client_disconnect(sid):
     #Trenger muligens en lock før man endrer verdien 
     global connected
-    connected.remove(user)
+    for con in connected:
+        if con['sessionID'] == sid:
+            connected.remove(con)
 
 @socketio.on('dis')
 def disconnect_message(data):
     print(data)
 
 
-@socketio.on('message')
+@socketio.on('new_klient')
 def handleMessage(username):
     sessionID = request.sid
     print(f'Dette er {username} sin SessionID: {sessionID}')
     newConnected(username, sessionID)
-    send(connected, broadcast = True)
+    emit('users',connected, broadcast = True)
 
 @socketio.on('connect')
 def ws_connect():
@@ -42,7 +44,8 @@ def ws_connect():
 
 @socketio.on('disconnect')
 def ws_disconnect():
-    print("En klient disconnected fra serveren")
+    client_disconnect(request.sid)
+    emit('users', connected, broadcast = True)
 
 @socketio.on('privateMessage')
 def offer_to_klient(payLoad):

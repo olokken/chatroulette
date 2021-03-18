@@ -14,26 +14,24 @@ const Chat = () => {
     socketRef.current = io.connect('/'); 
 
     socketRef.current.on('connect', () => {
-      socketRef.current.emit('message', authState.username);
+      socketRef.current.emit('new_klient', authState.username);
     }); 
 
-    socketRef.current.on('message', (data) => {
+    socketRef.current.on('users', (data) => {
       console.log(data);
+      setOnlineUsers(data); 
     })
 
-    /*socketRef.current.emit('privateMessage', {"sessionID":{sessionID}, "offer": {offer}});*/
+    const sendOffer = () => {
+      //socketRef.current.emit('privateMessage', {"sessionID":{sessionID}, "offer": {offer}});
+    }
+    
 
-
-    /*socketRef.current.on('close', () => {
-      socketRef.current.emit('dis', "Beskjed fra kleiten at den disconnecter"); 
-    });*/
-
-    /*socketRef.current.on('disconnect', () => {
-      axios.post('http://127.0.0.1:8001/dis', "Dette er en beskjed fra klienten som disconnecter"); 
-    })*/
+    socketRef.current.on('reciece_offer', (data) => {
+      //Gjør no med den bekretelsen i webrtc
+    })
   });
-
-
+  
 
 
   return <Chatbox />;
