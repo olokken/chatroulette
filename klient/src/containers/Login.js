@@ -1,7 +1,8 @@
-import React, {useState, createContext} from 'react';
-import { TextField, Button } from '@material-ui/core';
+import React, {useState, createContext, useContext} from 'react';
 import styled from 'styled-components';
 import { useHistory } from "react-router-dom";
+import LoginCard from '../components/LoginCard/LoginCard';
+import { AuthContext } from '../App';
 
 const LoginContainer = styled.div`
   width: 100%;
@@ -11,26 +12,10 @@ const LoginContainer = styled.div`
   justify-content: center;
 `;
 
-const LoginCard = styled.div`
-  width: 30rem;
-  height: 28rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-  padding: 3rem;
-  border-radius: 8px;
-`;
-
-export const LoginContext = createContext({
-  username: '',
-  setUsername: () => {},
-  })
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-
+  const [username, setUsername] = useState(''); 
+  const {setAuthState} = useContext(AuthContext); 
   const history = useHistory();
 
   const onChange = (event) => {
@@ -38,24 +23,15 @@ const Login = () => {
   }
 
   const onLogin = () => {
+    setAuthState({username: username}); 
     history.push('/chat');
   }
 
+
+
   return (
     <LoginContainer>
-      <LoginCard>
-        <h1>Login</h1>
-        <hr />
-        <TextField
-          style={{ width: '100%', marginBottom: 24 }}
-          label="Username"
-          onChange={onChange}
-          variant="outlined"
-        />
-        <Button style={{ width: '100%' }} variant="contained" color="secondary" onClick={onLogin}>
-          Enter chat room
-        </Button>
-      </LoginCard>
+      <LoginCard onLogin = {onLogin} onChange = {onChange}></LoginCard>
     </LoginContainer>
   );
 };

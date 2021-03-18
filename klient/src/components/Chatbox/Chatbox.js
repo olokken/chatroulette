@@ -8,9 +8,27 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const StyledMessages = styled.div``;
+const StyledOwnMessages = styled.div`
+  position: right;
+  width: 70%;
+  height: relative;
+  background-color: white;
+  margin: 3px;
 
-const StyledSendMessage = styled.div``;
+
+`;
+
+const StyledMessages = styled.div`
+  position: left;
+  width: 70%;
+  height: relative;
+  background-color: white;
+  margin: 3px;
+`;
+
+const StyledSendMessage = styled.div`
+
+`;
 
 const StyledChat = styled.div`
   position: relative;
@@ -25,12 +43,14 @@ const StyledHeader = styled.h2`
   text-align: left;
 `;
 
-const chatbox = props => {
+const chatbox = ({users, onUserClick }) => {
   return (
     <Container>
       <Grid className="h100" container>
         <Grid item md={4}>
-          <OnlineUsers></OnlineUsers>
+          <OnlineUsers
+            users={users}
+            onUserClick={(user) => onUserClick(user)} />
         </Grid>
         <Grid item md={8}>
           <StyledChat>
@@ -39,7 +59,7 @@ const chatbox = props => {
                 Her skal det stå navnet på Hvem du chatter med
               </StyledHeader>
               <StyledMessages>
-                Her skal det komme meldinger, men ikke helt enda hehe :-)
+                Her skal det komme meldinger, men ikke helt enda hehe :slight_smile:
               </StyledMessages>
             </div>
             <StyledSendMessage>

@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TextField, Button, Grid } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 
 const StyledDiv = styled.div`
-  border-right: solid yellow 1px;
+  border-right: solid 3px;
   min-width: 30%;
   min-height: 100%;
-  border-radius: 25px;
+  border-radius: 0px;
 `;
 
 const StyledSearchBar = styled.input`
@@ -22,22 +22,38 @@ const StyledUsers = styled.div`
   margin-top: 20px;
 `;
 
-const OnlineUsers = props => {
+const StyledUser = styled.div`
+  background-color: black;
+  width: 100px;
+`;
+
+const StyledUserCard = styled.div`
+  background-color: blue;
+  width: 70%;
+  margin: 4px;
+
+  
+`;
+
+const OnlineUsers = ({users, onUserClick}) => {
   return (
     <StyledDiv>
       <TextField
         placeholder="Search"
         style={{
-          width: '100%',
+          width: '40%',
           marginTop: '5px',
           marginLeft: '3px',
-          minHeight: '20px'
+          minHeight: '20px',
+          color: 'white'
         }}
       ></TextField>
       <StyledUsers>
         Her skal det komme opp de brukerne <br></br>
-        Som er innpå chatteappen vår :-)
-        {/*Her kan du mappe de tilkoblede brukerene du får fra props*/}
+        Som er innpå chatteappen vår :slight_smile:
+        {users.map(user => (
+          <StyledUserCard key={user.id} onClick={() => onUserClick(user)}>{user.name}</StyledUserCard>
+        ))}
       </StyledUsers>
     </StyledDiv>
   );
