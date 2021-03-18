@@ -41,8 +41,8 @@ const Chat = () => {
 
   }, []);
   
-  const onUserClick = (user) => {
-    console.log("USER CLCKED", user)
+  const onUserClick = (toUser) => {
+    console.log("USER CLCKED", toUser)
 
     const WebRTCConnection = new RTCPeerConnection({
       iceServers: [
@@ -65,8 +65,7 @@ const Chat = () => {
       WebRTCConnection.setLocalDescription(localDescription);
     });
 
-
-    setTimeout(() => { socket.emit('offer', offer, user); }, 250);
+    setTimeout(() => { socket.emit('offer', offer, toUser); }, 250);
 
   }
   return <Chatbox users={users} onUserClick={(user) => onUserClick(user)} />;
