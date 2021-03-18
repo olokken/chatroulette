@@ -3,29 +3,32 @@ var socket = require('socket.io');
 //App setup
 
 var app = express(); 
-var server = app.listen(8000, function() {
-    console.log('Listening on port 8000'); 
+var server = app.listen(8001, function() {
+    console.log('Listening on port 8001'); 
 });
 
-const users = {}; 
+const users = []; 
 
 var io = socket(server); 
 
-io.on('connection', (socket) => {
+io.on('connection', (client) => {
 
-    io.on('username', (username) => {
+    client.on('username', (username) => {
         const user = {
-            name: username, 
-            id: socket.id
+            "name": username, 
+            "id": client.id
         }; 
-        users[client.id] = user;
-        io.emit("connected", user)
+        users.push(user); 
+        console.log(user['id']); 
         io.emit('users', Object.values(users)); 
     });
 
     client.on("disconnect", () => {
-        const username = users[client.id];
-        delete users[client.id];
+        users.forEach(x => {
+            if (x['id'] == client.id) {
+                users.pop(x); 
+            }
+        });
         io.emit("disconnected", client.id);
       });
 });

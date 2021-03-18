@@ -55,7 +55,7 @@ const OnlineUsers = props => {
         Her skal det komme opp de brukerne <br></br>
         Som er innpå chatteappen vår :-)
         {props.users.map(user =>(
-          <StyledUserCard onClcik={onUserClick}>{user}</StyledUserCard>
+          <StyledUserCard onClick={onUserClick}>{user}</StyledUserCard>
         ))
         }
       </StyledUsers>
