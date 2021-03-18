@@ -8,9 +8,27 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const StyledMessages = styled.div``;
+const StyledOwnMessages = styled.div`
+  position: right;
+  width: 70%;
+  height: relative;
+  background-color: white;
+  margin: 3px;
 
-const StyledSendMessage = styled.div``;
+
+`;
+
+const StyledOtherMessages = styled.div`
+  position: left;
+  width: 70%;
+  height: relative;
+  background-color: white;
+  margin: 3px;
+`;
+
+const StyledSendMessage = styled.div`
+
+`;
 
 const StyledChat = styled.div`
   position: relative;
@@ -36,12 +54,21 @@ const chatbox = props => {
         <Grid item md={8}>
           <StyledChat>
             <div>
-              <StyledHeader>
+              <StyledHeader>{props.users[0]}
                 Her skal det stå navnet på Hvem du chatter med
               </StyledHeader>
-              <StyledMessages>
+              <label>You
+              <StyledOwnMessages>
+                {props.users[1]}
+                Her skal det komme meldinger, men ikke helt enda hehe :-)asddddddddddddddddddddddddd
+              </StyledOwnMessages>
+              </label>
+              <label>køkk  
+              <StyledOtherMessages>
+                {props.users[0]}
                 Her skal det komme meldinger, men ikke helt enda hehe :-)
-              </StyledMessages>
+              </StyledOtherMessages>
+              </label>
             </div>
             <StyledSendMessage>
               <TextField
