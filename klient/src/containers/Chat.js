@@ -8,11 +8,14 @@ const Chat = () => {
   const [users, setUsers] = useState([]);
   const { authState } = useContext(AuthContext);
 
-  useEffect(() => {
+  let offer;
 
-    var socket = io('http://localhost:8001', {
+
+  var socket = io('http://localhost:8001', {
     transports: ["websocket", "polling"]
   }); 
+
+  useEffect(() => {
 
     socket.on('connect', () => {
       socket.emit('username', authState.username); 
@@ -40,6 +43,31 @@ const Chat = () => {
   
   const onUserClick = (user) => {
     console.log("USER CLCKED", user)
+
+    const WebRTCConnection = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: 'stun:stun1.l.google.com:19302',
+        },
+      ],
+    });
+    
+    const chatChannel = WebRTCConnection.createDataChannel('chat');
+    chatChannel.onmessage = (event) => console.log('Ny melding:', event.data);
+    chatChannel.onopen = () => console.log('Åpnet ');
+    chatChannel.onclose = () => console.log('Lukket');
+  
+    WebRTCConnection.onicecandidate = (event) => {
+      if (event.candidate)
+       offer = JSON.stringify(WebRTCConnection.localDescription);
+    }
+    WebRTCConnection.createOffer().then((localDescription) => {
+      WebRTCConnection.setLocalDescription(localDescription);
+    });
+
+
+    setTimeout(() => { socket.emit('offer', offer, user); }, 250);
+
   }
   return <Chatbox users={users} onUserClick={(user) => onUserClick(user)} />;
 };

@@ -16,10 +16,14 @@ io.on('connection', (client) => {
     client.on('username', (username) => {
         const user = {
             "name": username, 
-            "id": client.id
+            "id": client.id,
+            "localDescription": null,
+            "remoteDescription": null,
         }; 
         users.push(user); 
         console.log(user['id']); 
+        console.log(io.id);
+        console.log(client.id);
         io.emit('users', Object.values(users)); 
     });
 
@@ -31,6 +35,16 @@ io.on('connection', (client) => {
         });
         io.emit("disconnected", client.id);
       });
+
+    client.on('offer', (offer,user) => {
+        users.forEach(x => {
+            if(x['id'] = user.id) {
+                x.localDescription = offer;
+            }
+        })
+        io.emit(users);
+    });
+    
 });
 
 
