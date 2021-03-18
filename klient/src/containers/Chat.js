@@ -21,7 +21,7 @@ const Chat = () => {
       socket.emit('username', authState.username); 
     })
 
-    socket.on("users", users => {
+    socket.on("users", (users) => {
       setUsers(users);
       console.log("Under kommer users, som jeg ikke får brukt i setUsers, faen");
       console.log(users);
@@ -29,7 +29,7 @@ const Chat = () => {
 
     socket.on("connected", user => {
       setUsers([...users, user]);
-      console.log(users)
+      console.log(user.name + " connceted")
     });
 
     socket.on("disconnected", id => {
@@ -37,6 +37,11 @@ const Chat = () => {
       setUsers(users => {
         return users.filter(user => user.id !== id);
       });
+    });
+
+    socket.on("answer",  toUser => {
+      console.log("Lager svar");
+      createAnswer(toUser);
     });
 
   }, []);
@@ -68,6 +73,44 @@ const Chat = () => {
     setTimeout(() => { socket.emit('offer', offer, toUser); }, 250);
 
   }
+
+  const createAnswer = (fromUser) => {
+    console.log(fromUser)
+    console.log(users)
+    console.log("RemoteDesc:" + fromUser.remoteDescription)
+    /*
+    const remoteDescription =
+
+    const WebRTCConnection = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: 'stun:stun1.l.google.com:19302',
+        },
+      ],
+    });
+    
+    let chatChannel;
+    WebRTCConnection.ondatachannel = (event) => {
+      if (event.channel.label == 'chat') {
+        chatChannel = event.channel;
+        chatChannel.onmessage = (event) => console.log('onmessage:', event.data);
+        chatChannel.onopen = () => console.log('onopen');
+        chatChannel.onclose = () => console.log('onclose');
+      }
+    };
+    
+    WebRTCConnection.onicecandidate = (event) => {
+      if (event.candidate)
+        console.log('localDescription:', JSON.stringify(WebRTCConnection.localDescription));
+    };
+    
+    WebRTCConnection.setRemoteDescription(remoteDescription);
+    
+    WebRTCConnection.createAnswer().then((localDescription) => {
+      WebRTCConnection.setLocalDescription(localDescription);
+    });*/
+  }
+
   return <Chatbox users={users} onUserClick={(user) => onUserClick(user)} />;
 };
 

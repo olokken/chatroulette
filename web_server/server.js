@@ -21,7 +21,6 @@ io.on('connection', (client) => {
             "localDescription": null,
             "remoteDescription": null,
         }; 
-
         my_id = client.id;
         users.push(user); 
         //console.log("Bruker sin id: " + user['id']); 
@@ -39,22 +38,17 @@ io.on('connection', (client) => {
       });
 
     client.on('offer', (offer, toUser) => {
-
-
-        console.log("Min ID er: " + my_id)
-        console.log("Din ID = " + toUser.id);
-
         users.forEach(x => {
             if(x['id'] == toUser.id && toUser.id != my_id) {
-                console.log("remote")
                 x.remoteDescription = offer;
             } 
             if(x['id'] == my_id && x['id'] != toUser.id) {
-                console.log("local")
                 x.localDescription = offer;
             }
         })
-        io.emit(users);
+        io.emit('users', Object.values(users));
+
+        setTimeout(() => {io.emit("answer", user.id)}, 250);
     });
     
 });
