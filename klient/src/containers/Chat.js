@@ -1,40 +1,38 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import io from "socket.io-client"; 
+import io from 'socket.io-client';
 import { AuthContext } from '../App';
 import Chatbox from '../components/Chatbox/Chatbox';
-//import axios from 'axios'; 
+//import axios from 'axios';
+
+var socket = io('http://localhost:8000', {
+    transports: ["websocket", "polling"]
+  }); 
 
 const Chat = () => {
-  const [onlineUsers, setOnlineUsers] = useState([]); 
-  const {authState} = useContext(AuthContext); 
-
-  const socketRef = useRef();
+  const [users, setUsers] = useState([]);
+  const { authState } = useContext(AuthContext);
 
   useEffect(() => {
-    socketRef.current = io.connect('/'); 
-
-    socketRef.current.on('connect', () => {
-      socketRef.current.emit('new_klient', authState.username);
-    }); 
-
-    socketRef.current.on('users', (data) => {
-      console.log(data);
-      setOnlineUsers(data); 
+    socket.on('connect', () => {
+      socket.emit('username', authState.username); 
     })
 
-    const sendOffer = () => {
-      //socketRef.current.emit('privateMessage', {"sessionID":{sessionID}, "offer": {offer}});
-    }
-    
+    socket.on("users", users => {
+      setUsers(users);
+    });
 
-    socketRef.current.on('reciece_offer', (data) => {
-      //Gjør no med den bekretelsen i webrtc
-    })
-  });
-  
+    socket.on("connected", user => {
+      setUsers(users => [...users, user]);
+    });
 
+    socket.on("disconnected", id => {
+      setUsers(users => {
+        return users.filter(user => user.id !== id);
+      });
+    });
 
-  return <Chatbox />;
+  }, []);
+  return <Chatbox connected={onlineUsers} />;
 };
 
 export default Chat;

@@ -42,7 +42,7 @@ const OnlineUsers = props => {
       <StyledUsers>
         Her skal det komme opp de brukerne <br></br>
         Som er innpå chatteappen vår :-)
-        {/*Her kan du mappe de tilkoblede brukerene du får fra props*/}
+        {/*Her kan du mappe de tilkoblede brukerene du får fra props y = {props.connected}*/}
       </StyledUsers>
     </StyledDiv>
   );
