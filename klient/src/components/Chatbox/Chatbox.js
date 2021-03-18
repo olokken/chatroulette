@@ -22,12 +22,38 @@ const StyledMessages = styled.div`
   position: left;
   width: 70%;
   height: relative;
-  background-color: white;
+  padding:5px;
+  background-color: none;
   margin: 3px;
+   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius:10px;
 `;
 
 const StyledSendMessage = styled.div`
 
+`;
+const StyledLable = styled.div`
+  font-size: small;
+`;
+
+const StyledMessageContainer = styled.div`
+  color: white;
+  width: 100%;
+  height: 40vh;
+  overflow: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar{width: 20px;}
+  ::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius:10px;
+  }
+  ::-webkit-scrollbar-thumb{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius:10px;
+  }
 `;
 
 const StyledChat = styled.div`
@@ -35,12 +61,14 @@ const StyledChat = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 90%;
+  height: 80%;
   padding: 3rem;
 `;
 
 const StyledHeader = styled.h2`
   text-align: left;
+  margin:0px;
+  color: white;
 `;
 
 const chatbox = ({users, onUserClick }) => {
@@ -54,14 +82,41 @@ const chatbox = ({users, onUserClick }) => {
         </Grid>
         <Grid item md={8}>
           <StyledChat>
-            <div>
               <StyledHeader>
-                Her skal det stå navnet på Hvem du chatter med
+                <p>Du snakker med ....</p>
               </StyledHeader>
-              <StyledMessages>
-                Her skal det komme meldinger, men ikke helt enda hehe :slight_smile:
-              </StyledMessages>
-            </div>
+              <StyledMessageContainer>
+                <StyledLable>You:</StyledLable>
+                <StyledMessages>
+                  Hei!
+                </StyledMessages>
+                <StyledLable>Form user 1:</StyledLable> 
+                <StyledMessages>
+                  HALLA!
+                </StyledMessages>
+                
+                <StyledLable>You:</StyledLable>
+                <StyledMessages>
+                  Skjer?
+                </StyledMessages>
+                <StyledLable>Form user 1:</StyledLable> 
+                <StyledMessages>
+                  «Da jeg bare var et foster, så dine øyne meg. I din bok ble de alle oppskrevet,
+                   de dagene som ble fastsatt da ikke én av dem var kommet. Hvor dyrebare dine 
+                   tanker er for meg, Gud! Hvor veldig er summen av dem!» Salme 139,16-17.
+                </StyledMessages>
+
+                
+                <StyledLable>You:</StyledLable>
+                <StyledMessages>
+                  Jah hade.
+                </StyledMessages>
+                <StyledLable>Form user 1:</StyledLable> 
+                <StyledMessages>
+                  hade :()
+                </StyledMessages>
+
+            </StyledMessageContainer>
             <StyledSendMessage>
               <TextField
                 style={{ width: '100%', marginBottom: 24, background: '#fff' }}
