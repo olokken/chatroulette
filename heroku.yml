@@ -2,9 +2,9 @@ build:
   docker: 
     web: ./klient/Dockerfile
       ports:
-      - "3000:3000"
+        - "3000:3000"
     socket: ./web_server/Dockerfile
       ports:
-      - "8001:8001"
+        - "8001:8001"
     
     
