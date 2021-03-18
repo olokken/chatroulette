@@ -1,10 +1,15 @@
 var express = require('express'); 
 var socket = require('socket.io'); 
+var os = require("os");
+
+
 //App setup
 
 var app = express(); 
 var server = app.listen(8001, function() {
     console.log('Listening on port 8001'); 
+    console.log(os.hostname());
+    console.log(server.address());
 });
 
 const users = []; 
