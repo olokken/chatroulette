@@ -1,4 +1,17 @@
 build:
   docker: 
-    web: ./klient/Dockerfile
+    web:
+    build:
+      context: ./klient
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:3000"
+      
+  socket: 
+    build: 
+      context: ./web_server
+      dockerfile: ./Dockerfile
+    ports:
+      - "8001:8001"
+    
     
