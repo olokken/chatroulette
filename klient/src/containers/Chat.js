@@ -37,8 +37,11 @@ const Chat = () => {
     });
 
   }, []);
-
-  return <Chatbox users = {users}/>;
+  
+  const onUserClick = (user) => {
+    console.log("USER CLCKED", user)
+  }
+  return <Chatbox users={users} onUserClick={(user) => onUserClick(user)} />;
 };
 
 export default Chat;

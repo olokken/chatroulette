@@ -18,7 +18,7 @@ const StyledOwnMessages = styled.div`
 
 `;
 
-const StyledOtherMessages = styled.div`
+const StyledMessages = styled.div`
   position: left;
   width: 70%;
   height: relative;
@@ -43,32 +43,24 @@ const StyledHeader = styled.h2`
   text-align: left;
 `;
 
-const chatbox = props => {
+const chatbox = ({users, onUserClick }) => {
   return (
     <Container>
       <Grid className="h100" container>
         <Grid item md={4}>
-          <OnlineUsers users = {props.users}>
-            </OnlineUsers>
+          <OnlineUsers
+            users={users}
+            onUserClick={(user) => onUserClick(user)} />
         </Grid>
         <Grid item md={8}>
           <StyledChat>
             <div>
-              <StyledHeader>{props.users[0]}
+              <StyledHeader>
                 Her skal det stå navnet på Hvem du chatter med
               </StyledHeader>
-              <label>You
-              <StyledOwnMessages>
-                {props.users[1]}
-                Her skal det komme meldinger, men ikke helt enda hehe :-)asddddddddddddddddddddddddd
-              </StyledOwnMessages>
-              </label>
-              <label>køkk  
-              <StyledOtherMessages>
-                {props.users[0]}
-                Her skal det komme meldinger, men ikke helt enda hehe :-)
-              </StyledOtherMessages>
-              </label>
+              <StyledMessages>
+                Her skal det komme meldinger, men ikke helt enda hehe :slight_smile:
+              </StyledMessages>
             </div>
             <StyledSendMessage>
               <TextField

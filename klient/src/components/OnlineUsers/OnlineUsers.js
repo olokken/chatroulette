@@ -35,10 +35,7 @@ const StyledUserCard = styled.div`
   
 `;
 
-const OnlineUsers = props => {
-  const onUserClick = (name) => {
-    console.log(name)
-  }
+const OnlineUsers = ({users, onUserClick}) => {
   return (
     <StyledDiv>
       <TextField
@@ -53,11 +50,10 @@ const OnlineUsers = props => {
       ></TextField>
       <StyledUsers>
         Her skal det komme opp de brukerne <br></br>
-        Som er innpå chatteappen vår :-)
-        {props.users.map(user =>(
-          <StyledUserCard onClick={() => onUserClick(user.name)} key = {user.id}>{user.name}</StyledUserCard>
-        ))
-        }
+        Som er innpå chatteappen vår :slight_smile:
+        {users.map(user => (
+          <StyledUserCard key={user.id} onClick={() => onUserClick(user)}>{user.name}</StyledUserCard>
+        ))}
       </StyledUsers>
     </StyledDiv>
   );
