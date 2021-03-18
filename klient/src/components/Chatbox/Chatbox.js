@@ -30,7 +30,8 @@ const chatbox = props => {
     <Container>
       <Grid className="h100" container>
         <Grid item md={4}>
-          <OnlineUsers /*connected = {props.connected}*/ ></OnlineUsers>
+          <OnlineUsers users = {props.users}>
+            </OnlineUsers>
         </Grid>
         <Grid item md={8}>
           <StyledChat>
