@@ -19,7 +19,7 @@ const Chat = () => {
     })
 
     socket.on("users", users => {
-      //setUsers(users);
+      setUsers(users);
       console.log("Under kommer users, som jeg ikke får brukt i setUsers, faen");
       console.log(users);
     });
