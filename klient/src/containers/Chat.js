@@ -8,9 +8,9 @@ const Chat = () => {
   const [onlineUsers, setOnlineUsers] = useState([]); 
   const {authState} = useContext(AuthContext); 
 
-  const socketRef = useRef();
-
-  useEffect(() => {
+  //const socketRef = useRef();
+  //setOnlineUsers(['user1','user2','user3']);
+ /* useEffect(() => {
     socketRef.current = io.connect('/'); 
 
     socketRef.current.on('connect', () => {
@@ -30,11 +30,11 @@ const Chat = () => {
     socketRef.current.on('reciece_offer', (data) => {
       //Gjør no med den bekretelsen i webrtc
     })
-  });
+  });*/
   
 
 
-  return <Chatbox />;
+  return <Chatbox users = {['user1','user2','user3']}/>;
 };
 
 export default Chat;
