@@ -10,6 +10,7 @@ var server = app.listen(8001, function() {
 const users = []; 
 
 var io = socket(server); 
+let my_id;
 
 io.on('connection', (client) => {
 
@@ -20,10 +21,11 @@ io.on('connection', (client) => {
             "localDescription": null,
             "remoteDescription": null,
         }; 
+
+        my_id = client.id;
         users.push(user); 
-        console.log(user['id']); 
-        console.log(io.id);
-        console.log(client.id);
+        //console.log("Bruker sin id: " + user['id']); 
+        //console.log("Din id = " + client.id);
         io.emit('users', Object.values(users)); 
     });
 
@@ -36,9 +38,19 @@ io.on('connection', (client) => {
         io.emit("disconnected", client.id);
       });
 
-    client.on('offer', (offer,user) => {
+    client.on('offer', (offer, toUser) => {
+
+
+        console.log("Min ID er: " + my_id)
+        console.log("Din ID = " + toUser.id);
+
         users.forEach(x => {
-            if(x['id'] = user.id) {
+            if(x['id'] == toUser.id && toUser.id != my_id) {
+                console.log("remote")
+                x.remoteDescription = offer;
+            } 
+            if(x['id'] == my_id && x['id'] != toUser.id) {
+                console.log("local")
                 x.localDescription = offer;
             }
         })
