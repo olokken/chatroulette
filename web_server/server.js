@@ -18,39 +18,36 @@ io.on('connection', (client) => {
         const user = {
             "name": username, 
             "id": client.id,
-            "localDescription": null,
-            "remoteDescription": null,
         }; 
         my_id = client.id;
         users.push(user); 
         //console.log("Bruker sin id: " + user['id']); 
         //console.log("Din id = " + client.id);
-        io.emit('users', Object.values(users)); 
+        io.emit('users', Object.values(users));
+        io.emit("connected", user); 
     });
 
     client.on("disconnect", () => {
         users.forEach(x => {
             if (x['id'] == client.id) {
-                users.pop(x); 
+                let index = users.indexOf(x);
+                users.splice(index, 1); 
             }
         });
         io.emit("disconnected", client.id);
       });
 
-    client.on('offer', (offer, toUser) => {
-        users.forEach(x => {
-            if(x['id'] == toUser.id && toUser.id != my_id) {
-                x.remoteDescription = offer;
-            } 
-            if(x['id'] == my_id && x['id'] != toUser.id) {
-                x.localDescription = offer;
-            }
-        })
-        io.emit('users', Object.values(users));
-
-        setTimeout(() => {io.emit("answer", user.id)}, 250);
+    client.on('offer', payload => {
+        io.to(payload.target).emit("offer", payload);
     });
-    
-});
 
+    client.on("answer", payload => {
+        io.to(payload.target).emit("answer", payload);
+    });
+
+    client.on("ice-candidate", incoming => {
+        io.to(incoming.target).emit("ice-candidate", incoming.candidate);
+    });    
+
+});
 

@@ -1,117 +1,161 @@
+import { useForkRef } from '@material-ui/core';
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import io from 'socket.io-client';
 import { AuthContext } from '../App';
 import Chatbox from '../components/Chatbox/Chatbox';
+import { v1 as uuid } from "uuid";
+
 //import axios from 'axios';
 
 const Chat = () => {
   const [users, setUsers] = useState([]);
   const { authState } = useContext(AuthContext);
+  const socket = useRef();
+  const peerRef = useRef(); 
+  const otherUser = useRef();
+  const [text, setText] = useState("")
+  const [messages, setMessages] = useState([]);
 
-  let offer;
 
-
-  var socket = io('http://localhost:8001', {
-    transports: ["websocket", "polling"]
-  }); 
 
   useEffect(() => {
 
-    socket.on('connect', () => {
-      socket.emit('username', authState.username); 
+    socket.current = io('http://localhost:8001', {
+      transports: ["websocket", "polling"]
+    }); 
+
+    socket.current.on('connect', () => {
+      socket.current.emit('username', authState.username); 
     })
 
-    socket.on("users", (users) => {
+    socket.current.on("users", users => {
       setUsers(users);
-      console.log("Under kommer users, som jeg ikke får brukt i setUsers, faen");
       console.log(users);
     });
 
-    socket.on("connected", user => {
-      setUsers([...users, user]);
-      console.log(user.name + " connceted")
+    socket.current.on("connected", user => {
+      console.log(user.name + " conneceted")
     });
 
-    socket.on("disconnected", id => {
+    socket.current.on("disconnected", id => {
       console.log(id); 
       setUsers(users => {
         return users.filter(user => user.id !== id);
       });
     });
 
-    socket.on("answer",  toUser => {
-      console.log("Lager svar");
-      createAnswer(toUser);
-    });
+    socket.current.on('offer', handleOffer);
 
+    socket.current.on('answer', handleAnswer);
+
+    socket.current.on('ice-candidate', handleNewICECandidateMsg);
   }, []);
   
-  const onUserClick = (toUser) => {
-    console.log("USER CLCKED", toUser)
-
-    const WebRTCConnection = new RTCPeerConnection({
-      iceServers: [
-        {
-          urls: 'stun:stun1.l.google.com:19302',
-        },
-      ],
-    });
-    
-    const chatChannel = WebRTCConnection.createDataChannel('chat');
-    chatChannel.onmessage = (event) => console.log('Ny melding:', event.data);
-    chatChannel.onopen = () => console.log('Åpnet ');
-    chatChannel.onclose = () => console.log('Lukket');
-  
-    WebRTCConnection.onicecandidate = (event) => {
-      if (event.candidate)
-       offer = JSON.stringify(WebRTCConnection.localDescription);
+  /*const createRoom = () => {
+    function create() {
+      const id = uuid();
+      props.history.push(`/chat/${id}`);
     }
-    WebRTCConnection.createOffer().then((localDescription) => {
-      WebRTCConnection.setLocalDescription(localDescription);
-    });
+  }*/
 
-    setTimeout(() => { socket.emit('offer', offer, toUser); }, 250);
-
+  const onUserClick = (toUser) => {
+    if(toUser.id !== socket.current.id) {
+    console.log("USER CLCKED", toUser)
+    startSamtale(toUser.id);
+    } else{
+      console.log("Du kan ikke snakke med deg selv")
+    }
   }
 
-  const createAnswer = (fromUser) => {
-    console.log(fromUser)
-    console.log(users)
-    console.log("RemoteDesc:" + fromUser.remoteDescription)
-    /*
-    const remoteDescription =
+  function startSamtale(userID) {
+    console.log("Starter samtale");
+    peerRef.current = createPeer(userID);
+  }
 
-    const WebRTCConnection = new RTCPeerConnection({
+  function createPeer(userID) {
+    console.log("Lager peer med id " + userID);
+    const peer = new RTCPeerConnection({
       iceServers: [
         {
-          urls: 'stun:stun1.l.google.com:19302',
-        },
-      ],
+          urls: 'stun:stun1.l.google.com:19302'
+        }
+      ]
     });
-    
-    let chatChannel;
-    WebRTCConnection.ondatachannel = (event) => {
-      if (event.channel.label == 'chat') {
-        chatChannel = event.channel;
-        chatChannel.onmessage = (event) => console.log('onmessage:', event.data);
-        chatChannel.onopen = () => console.log('onopen');
-        chatChannel.onclose = () => console.log('onclose');
-      }
-    };
-    
-    WebRTCConnection.onicecandidate = (event) => {
-      if (event.candidate)
-        console.log('localDescription:', JSON.stringify(WebRTCConnection.localDescription));
-    };
-    
-    WebRTCConnection.setRemoteDescription(remoteDescription);
-    
-    WebRTCConnection.createAnswer().then((localDescription) => {
-      WebRTCConnection.setLocalDescription(localDescription);
-    });*/
+
+    peer.onicecandidate = handleICECandidateEvent;
+    peer.onnegotiationneeded = () => handleNegotiationNeededEvent(userID);
+
+    return peer;
   }
 
+  function handleNegotiationNeededEvent(userID) {
+    peerRef.current
+      .createOffer()
+      .then(offer => {
+        return peerRef.current.setLocalDescription(offer);
+      })
+      .then(() => {
+        const payload = {
+          target: userID,
+          caller: socket.current.id,
+          sdp: peerRef.current.localDescription
+        };
+        socket.current.emit('offer', payload);
+      })
+      .catch(e => console.log(e));
+  }
+
+  function handleOffer(incoming) {
+    peerRef.current = createPeer();
+    const desc = new RTCSessionDescription(incoming.sdp);
+    peerRef.current
+      .setRemoteDescription(desc)
+      console.log(desc)
+      .then(() => {})
+      .then(() => {
+        return peerRef.current.createAnswer();
+      })
+      .then(answer => {
+        return peerRef.current.setLocalDescription(answer);
+      })
+      .then(() => {
+        const payload = {
+          target: incoming.caller,
+          caller: socket.current.id,
+          sdp: peerRef.current.localDescription
+        };
+        socket.current.emit('answer', payload);
+      });
+  }
+
+  function handleAnswer(message) {
+    const desc = new RTCSessionDescription(message.sdp);
+    console.log(desc);
+    peerRef.current.setRemoteDescription(desc).catch(e => console.log(e));
+  }
+
+  function handleICECandidateEvent(e) {
+    console.log(e);
+    if (e.candidate) {
+      const payload = {
+        target: otherUser.current,
+        candidate: e.candidate
+      };
+      socket.current.emit('ice-candidate', payload);
+    }
+  }
+
+  function handleNewICECandidateMsg(incoming) {
+    const candidate = new RTCIceCandidate(incoming);
+
+    peerRef.current.addIceCandidate(candidate).catch(e => console.log(e));
+  }
+
+  function handleChange(e) {
+    setText(e.target.value);
+  }
+  
   return <Chatbox users={users} onUserClick={(user) => onUserClick(user)} />;
-};
+}
 
 export default Chat;
