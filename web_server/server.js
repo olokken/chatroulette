@@ -1,13 +1,19 @@
-var express = require('express'); 
-var socket = require('socket.io'); 
-var os = require("os");
+require('dotenv').config(); 
+const express = require('express'); 
+const socket = require('socket.io'); 
+const os = require("os");
+ 
 
 
 //App setup
 
 var app = express(); 
-var server = app.listen(8001, function() {
-    console.log('Listening on port 8001'); 
+const port = process.env.PORT; 
+console.log(port); 
+const env = process.env.PROD;
+console.log(env); 
+var server = app.listen(port, function() {
+    console.log('Listening on port ' + port); 
     console.log(os.hostname());
     console.log(server.address());
 });

@@ -10,29 +10,31 @@ const Chat = () => {
 
   let offer;
 
-
-  var socket = io('http://localhost:8001', {
-    transports: ["websocket", "polling"]
-  }); 
+  const socketRef = useRef();
+  
 
   useEffect(() => {
 
-    socket.on('connect', () => {
-      socket.emit('username', authState.username); 
+    socketRef.current = io('http://localhost:8001', {
+    transports: ["websocket", "polling"]
+  }); 
+
+    socketRef.current.on('connect', () => {
+      socketRef.current.emit('username', authState.username); 
     })
 
-    socket.on("users", users => {
+    socketRef.current.on("users", users => {
       setUsers(users);
       console.log("Under kommer users, som jeg ikke får brukt i setUsers, faen");
       console.log(users);
     });
 
-    socket.on("connected", user => {
+    socketRef.current.on("connected", user => {
       setUsers([...users, user]);
       console.log(users)
     });
 
-    socket.on("disconnected", id => {
+    socketRef.current.on("disconnected", id => {
       console.log(id); 
       setUsers(users => {
         return users.filter(user => user.id !== id);
@@ -65,7 +67,7 @@ const Chat = () => {
       WebRTCConnection.setLocalDescription(localDescription);
     });
 
-    setTimeout(() => { socket.emit('offer', offer, toUser); }, 250);
+    setTimeout(() => { socketRef.current.emit('offer', offer, toUser); }, 250);
 
   }
   return <Chatbox users={users} onUserClick={(user) => onUserClick(user)} />;
