@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import { TextField } from '@material-ui/core';
 
@@ -47,9 +47,11 @@ const StyledUserCard = styled.div`
 `;
 
 const OnlineUsers = ({users, onUserClick}) => {
+  const [searchText, setSearchText] = useState('')
   return (
     <StyledDiv>
       <TextField
+        onChange = {e => setSearchText(e.target.value)}
         placeholder="Search"
         style={{
           width: '80%',
@@ -61,7 +63,13 @@ const OnlineUsers = ({users, onUserClick}) => {
       ></TextField>
       <StyledUsers>
        <b>Brukerne:</b> <br></br>
-        {users.map(user => (
+        {users.filter((user) => {
+          if(searchText == ""){
+            return user
+          }else if(user.name != null && user.name.toLowerCase().includes(searchText.toLocaleLowerCase())){
+            return user
+          }
+        }).map(user => (
           <StyledUserCard key={user.id} onClick={() => onUserClick(user)}>{user.name}</StyledUserCard>
         ))}
       </StyledUsers>
