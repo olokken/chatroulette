@@ -2,16 +2,22 @@ require('dotenv').config();
 const express = require('express'); 
 const socket = require('socket.io'); 
 const os = require("os");
+const path = require('path'); 
  
 
 
 //App setup
 
 var app = express(); 
+console.log(process.env.PROD); 
+if (process.env.PROD) {
+    app.use(express.static(path.join(_dirname, '../klient/build')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../klient/build/index.html')); 
+    });
+}
 
 const port = process.env.PORT || 8001; 
-console.log(port); 
-console.log(process.env.PROD);
 
 var server = app.listen(port, function() {
     console.log('Listening on port ' + port); 
