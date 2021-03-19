@@ -8,15 +8,17 @@ const os = require("os");
 //App setup
 
 var app = express(); 
-const port = process.env.PORT; 
+
+const port = process.env.PORT || 8001; 
 console.log(port); 
-const env = process.env.PROD;
-console.log(env); 
+console.log(process.env.PROD);
+
 var server = app.listen(port, function() {
     console.log('Listening on port ' + port); 
-    console.log(os.hostname());
-    console.log(server.address());
+    //console.log(os.hostname());
+    //console.log(server.address());
 });
+
 
 const users = []; 
 
@@ -52,7 +54,7 @@ io.on('connection', (client) => {
     client.on('offer', (offer, toUser) => {
 
 
-        console.log("Min ID er: " + my_id)
+        console.log("Min ID er: " + my_id); 
         console.log("Din ID = " + toUser.id);
 
         users.forEach(x => {

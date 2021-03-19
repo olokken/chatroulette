@@ -63,6 +63,7 @@ const Chat = () => {
       if (event.candidate)
        offer = JSON.stringify(WebRTCConnection.localDescription);
     }
+    
     WebRTCConnection.createOffer().then((localDescription) => {
       WebRTCConnection.setLocalDescription(localDescription);
     });
