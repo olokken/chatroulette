@@ -94,27 +94,6 @@ const chatbox = ({users, onUserClick }) => {
                 <StyledMessages>
                   HALLA!
                 </StyledMessages>
-                
-                <StyledLable>You:</StyledLable>
-                <StyledMessages>
-                  Skjer?
-                </StyledMessages>
-                <StyledLable>Form user 1:</StyledLable> 
-                <StyledMessages>
-                  «Da jeg bare var et foster, så dine øyne meg. I din bok ble de alle oppskrevet,
-                   de dagene som ble fastsatt da ikke én av dem var kommet. Hvor dyrebare dine 
-                   tanker er for meg, Gud! Hvor veldig er summen av dem!» Salme 139,16-17.
-                </StyledMessages>
-
-                
-                <StyledLable>You:</StyledLable>
-                <StyledMessages>
-                  Jah hade.
-                </StyledMessages>
-                <StyledLable>Form user 1:</StyledLable> 
-                <StyledMessages>
-                  hade :()
-                </StyledMessages>
 
             </StyledMessageContainer>
             <StyledSendMessage>
