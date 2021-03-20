@@ -15,7 +15,7 @@ const Chat = () => {
 
   useEffect(() => {
 
-    socketRef.current = io.connect("/", {
+    socketRef.current = io('/', {
     transports: ["websocket", "polling"]
   }); 
 

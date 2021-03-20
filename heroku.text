@@ -1,3 +1,4 @@
+Heroku.yml if we are running server and klient seperately
 version: "3.9"
 services:
   web:
@@ -10,4 +11,3 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "3000:3000"
-    

@@ -9,22 +9,22 @@ const path = require('path');
 //App setup
 
 var app = express(); 
-console.log(process.env.PROD); 
-if (process.env.PROD) {
-    app.use(express.static(path.join(_dirname, '../klient/build')));
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../klient/build/index.html')); 
-    });
-}
 
-const port = process.env.PORT || 8001; 
+app.use(express.static(path.join('../klient/build/')));
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join('../klient/build/index.html')); 
+}); 
+
+
+
+const port = process.env.PORT || 3000; 
+console.log(port); 
 var server = app.listen(port, function() {
     console.log('Listening on port ' + port); 
     //console.log(os.hostname());
     //console.log(server.address());
 });
-
 
 const users = []; 
 

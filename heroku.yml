@@ -1,6 +1,5 @@
 build:
   docker: 
-    web: ./klient/Dockerfile
-    socket: ./web_server/Dockerfile
+    web: ./Dockerfile
     
     
