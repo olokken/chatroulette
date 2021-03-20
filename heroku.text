@@ -1,4 +1,4 @@
-Heroku.yml if we are running server and klient seperately
+Heroku.yml if we are running server and klient seperately:
 version: "3.9"
 services:
   web:
@@ -11,3 +11,5 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "3000:3000"
+
+Then you also have to change the websocket path in the Chat.js file. 
