@@ -10,11 +10,12 @@ WORKDIR /klient
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-#COPY ["./web_server/package.json", "./web_server/package-lock.json*", "./web_server/"]
+#COPY ["./web_server/package.json", "./web_server/package-lock.json*", "./klient/"]
 
 RUN npm install
 
-RUN npm build
+RUN npm run-script build
+
 
 WORKDIR /web_server
 
