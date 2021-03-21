@@ -61,7 +61,13 @@ const OnlineUsers = ({users, onUserClick}) => {
       ></TextField>
       <StyledUsers>
        <b>Brukerne:</b> <br></br>
-        {users.map(user => (
+       {users.filter((user) => {
+          if(searchText == ""){
+            return user
+          }else if(user.name != null && user.name.toLowerCase().includes(searchText.toLocaleLowerCase())){
+            return user
+          }
+        }).map(user => (
           <StyledUserCard key={user.id} onClick={() => onUserClick(user)}>{user.name}</StyledUserCard>
         ))}
       </StyledUsers>
