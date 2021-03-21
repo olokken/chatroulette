@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import { TextField } from '@material-ui/core';
 
@@ -47,6 +47,7 @@ const StyledUserCard = styled.div`
 `;
 
 const OnlineUsers = ({users, onUserClick}) => {
+  const [searchText, setSearchText] = useState('')
   return (
     <StyledDiv>
       <TextField
