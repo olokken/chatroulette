@@ -51,6 +51,7 @@ const OnlineUsers = ({users, onUserClick}) => {
   return (
     <StyledDiv>
       <TextField
+        onChange = {e => setSearchText(e.target.value)}
         placeholder="Search"
         style={{
           width: '80%',
