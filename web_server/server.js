@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 require('dotenv').config(); 
 const express = require('express'); 
 const socket = require('socket.io'); 
@@ -24,12 +25,20 @@ var server = app.listen(port, function() {
     console.log('Listening on port ' + port); 
     //console.log(os.hostname());
     //console.log(server.address());
+=======
+const express = require('express'); 
+const socket = require('socket.io'); 
+//App setup
+
+const app = express(); 
+const server = app.listen(8001, function() {
+    console.log('Listening on port 8001'); 
+>>>>>>> WebRTC
 });
 
 const users = []; 
 
-var io = socket(server); 
-let my_id;
+const io = socket(server); 
 
 io.on('connection', (client) => {
 
@@ -37,45 +46,44 @@ io.on('connection', (client) => {
         const user = {
             "name": username, 
             "id": client.id,
-            "localDescription": null,
-            "remoteDescription": null,
         }; 
-
-        my_id = client.id;
         users.push(user); 
         //console.log("Bruker sin id: " + user['id']); 
         //console.log("Din id = " + client.id);
-        io.emit('users', Object.values(users)); 
+        io.emit('users', Object.values(users));
+        io.emit("connected", user); 
     });
 
     client.on("disconnect", () => {
         users.forEach(x => {
             if (x['id'] == client.id) {
-                users.pop(x); 
+                let index = users.indexOf(x);
+                users.splice(index, 1); 
             }
         });
         io.emit("disconnected", client.id);
       });
 
-    client.on('offer', (offer, toUser) => {
+    client.on('offer', payload => {
+        io.to(payload.target).emit("offer", payload);
+    });
 
+    client.on("answer", payload => {
+        io.to(payload.target).emit("answer", payload);
+    });
 
+<<<<<<< HEAD
         console.log("Min ID er: " + my_id); 
         console.log("Din ID = " + toUser.id);
+=======
+    client.on('ice-candidate', incoming => {
+        io.to(incoming.target).emit('ice-candidate', incoming.candidate);
+    });    
+>>>>>>> WebRTC
 
-        users.forEach(x => {
-            if(x['id'] == toUser.id && toUser.id != my_id) {
-                console.log("remote")
-                x.remoteDescription = offer;
-            } 
-            if(x['id'] == my_id && x['id'] != toUser.id) {
-                console.log("local")
-                x.localDescription = offer;
-            }
-        })
-        io.emit(users);
-    });
-    
+    client.on("roomID", romInfo => {
+        io.to(romInfo.target).emit("romInvitasjon",  romInfo);
+    })
+
 });
-
 
