@@ -1,11 +1,21 @@
+require('dotenv').config();
 const express = require('express'); 
+const path = require('path');
 const socket = require('socket.io'); 
 //App setup
-
 const app = express(); 
-const server = app.listen(8001, function() {
-    console.log('Listening on port 8001'); 
+app.use(express.static(path.join('../klient/build/')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join('../klient/build/index.html')); 
 });
+
+const port = process.env.PORT || 8000;
+
+const server = app.listen(port, function() {
+    console.log('Listening on port ' + port); 
+});
+
 
 const users = []; 
 
@@ -19,8 +29,6 @@ io.on('connection', (client) => {
             "id": client.id,
         }; 
         users.push(user); 
-        //console.log("Bruker sin id: " + user['id']); 
-        //console.log("Din id = " + client.id);
         io.emit('users', Object.values(users));
         io.emit("connected", user); 
     });

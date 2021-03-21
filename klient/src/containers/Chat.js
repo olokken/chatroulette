@@ -20,7 +20,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    socket.current = io('http://localhost:8001', {
+    socket.current = io('/', {
       transports: ['websocket', 'polling']
     });
 
