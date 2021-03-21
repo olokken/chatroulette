@@ -14,25 +14,21 @@ const StyledOwnMessages = styled.div`
   height: relative;
   background-color: white;
   margin: 3px;
-
-
 `;
 
 const StyledMessages = styled.div`
   position: left;
   width: 70%;
   height: relative;
-  padding:5px;
+  padding: 5px;
   background-color: none;
   margin: 3px;
-   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    border-radius:10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
 `;
 
-const StyledSendMessage = styled.div`
-
-`;
+const StyledSendMessage = styled.div``;
 const StyledLable = styled.div`
   font-size: small;
 `;
@@ -43,16 +39,18 @@ const StyledMessageContainer = styled.div`
   height: 40vh;
   overflow: hidden;
   overflow-y: scroll;
-  ::-webkit-scrollbar{width: 20px;}
-  ::-webkit-scrollbar-track{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    border-radius:10px;
+  ::-webkit-scrollbar {
+    width: 20px;
   }
-  ::-webkit-scrollbar-thumb{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    border-radius:10px;
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
   }
 `;
 
@@ -67,66 +65,40 @@ const StyledChat = styled.div`
 
 const StyledHeader = styled.h2`
   text-align: left;
-  margin:0px;
+  margin: 0px;
   color: white;
 `;
 
-const chatbox = ({users, onUserClick }) => {
+const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage }) => {
   return (
     <Container>
       <Grid className="h100" container>
         <Grid item md={4}>
-          <OnlineUsers
-            users={users}
-            onUserClick={(user) => onUserClick(user)} />
+          <OnlineUsers users={users} onUserClick={user => onUserClick(user)} />
         </Grid>
         <Grid item md={8}>
           <StyledChat>
-              <StyledHeader>
-                <p>Du snakker med ....</p>
-              </StyledHeader>
-              <StyledMessageContainer>
-                <StyledLable>You:</StyledLable>
-                <StyledMessages>
-                  Hei!
-                </StyledMessages>
-                <StyledLable>Form user 1:</StyledLable> 
-                <StyledMessages>
-                  HALLA!
-                </StyledMessages>
-                
-                <StyledLable>You:</StyledLable>
-                <StyledMessages>
-                  Skjer?
-                </StyledMessages>
-                <StyledLable>Form user 1:</StyledLable> 
-                <StyledMessages>
-                  «Da jeg bare var et foster, så dine øyne meg. I din bok ble de alle oppskrevet,
-                   de dagene som ble fastsatt da ikke én av dem var kommet. Hvor dyrebare dine 
-                   tanker er for meg, Gud! Hvor veldig er summen av dem!» Salme 139,16-17.
-                </StyledMessages>
-
-                
-                <StyledLable>You:</StyledLable>
-                <StyledMessages>
-                  Jah hade.
-                </StyledMessages>
-                <StyledLable>Form user 1:</StyledLable> 
-                <StyledMessages>
-                  hade :()
-                </StyledMessages>
-
+            <StyledHeader>
+              <p>Du snakker med ....</p>
+            </StyledHeader>
+            <StyledMessageContainer>
+              {messages.map(message => (
+                <StyledMessages>{message}</StyledMessages>
+              ))}
             </StyledMessageContainer>
             <StyledSendMessage>
               <TextField
                 style={{ width: '100%', marginBottom: 24, background: '#fff' }}
                 label="ENTER MESSAGE"
                 variant="outlined"
+                onChange = {handleChange}
+                value = {text}
               />
               <Button
                 style={{ width: '100%' }}
                 variant="contained"
                 color="secondary"
+                onClick= {sendMessage}
               >
                 Send Message
               </Button>

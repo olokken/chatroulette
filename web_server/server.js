@@ -49,5 +49,9 @@ io.on('connection', (client) => {
         io.to(incoming.target).emit("ice-candidate", incoming.candidate);
     });    
 
+    client.on("roomID", romInfo => {
+        io.to(romInfo.target).emit("romInvitasjon",  romInfo.romID);
+    })
+
 });
 

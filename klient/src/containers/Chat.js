@@ -3,45 +3,49 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import io from 'socket.io-client';
 import { AuthContext } from '../App';
 import Chatbox from '../components/Chatbox/Chatbox';
-import { v1 as uuid } from "uuid";
+import { v1 as uuid } from 'uuid';
+import { useHistory } from 'react-router-dom';
 
 //import axios from 'axios';
 
 const Chat = () => {
+  const history = useHistory();
   const [users, setUsers] = useState([]);
   const { authState } = useContext(AuthContext);
+  const sendChannel = useRef();
   const socket = useRef();
-  const peerRef = useRef(); 
+  const peerRef = useRef();
   const otherUser = useRef();
-  const [text, setText] = useState("")
+  const [text, setText] = useState('');
   const [messages, setMessages] = useState([]);
 
-
-
   useEffect(() => {
-
     socket.current = io('http://localhost:8001', {
-      transports: ["websocket", "polling"]
-    }); 
+      transports: ['websocket', 'polling']
+    });
 
     socket.current.on('connect', () => {
-      socket.current.emit('username', authState.username); 
-    })
+      socket.current.emit('username', authState.username);
+    });
 
-    socket.current.on("users", users => {
+    socket.current.on('users', users => {
       setUsers(users);
       console.log(users);
     });
 
-    socket.current.on("connected", user => {
-      console.log(user.name + " conneceted")
+    socket.current.on('connected', user => {
+      console.log(user.name + ' conneceted');
     });
 
-    socket.current.on("disconnected", id => {
-      console.log(id); 
+    socket.current.on('disconnected', id => {
+      console.log(id);
       setUsers(users => {
         return users.filter(user => user.id !== id);
       });
+    });
+
+    socket.current.on('romInvitasjon', romID => {
+      setRoom(romID);
     });
 
     socket.current.on('offer', handleOffer);
@@ -50,30 +54,45 @@ const Chat = () => {
 
     socket.current.on('ice-candidate', handleNewICECandidateMsg);
   }, []);
-  
-  /*const createRoom = () => {
-    function create() {
-      const id = uuid();
-      props.history.push(`/chat/${id}`);
-    }
-  }*/
 
-  const onUserClick = (toUser) => {
-    if(toUser.id !== socket.current.id) {
-    console.log("USER CLCKED", toUser)
-    startSamtale(toUser.id);
-    } else{
-      console.log("Du kan ikke snakke med deg selv")
+  const onUserClick = toUser => {
+    if (toUser.id !== socket.current.id) {
+      console.log('USER CLCKED', toUser);
+      let romID = createRoom();
+      const romInfo = {
+        target: toUser.id,
+        romID: romID
+      };
+      startSamtale(toUser.id, romID);
+      socket.current.emit('roomID', romInfo);
+    } else {
+      console.log('Du kan ikke snakke med deg selv');
+    }
+  };
+
+  function createRoom() {
+    const id = uuid();
+    history.push(`/chat/${id}`);
+    return id;
+  }
+
+  function setRoom(id) {
+    let vilSnakke = window.confirm('Vil du snakke');
+    if (vilSnakke) {
+      history.push(`/chat/${id}`);
     }
   }
 
   function startSamtale(userID) {
-    console.log("Starter samtale");
-    peerRef.current = createPeer(userID);
+    console.log('Starter samtale');
+    peerRef.current = createPeer(userID);;
+    sendChannel.current = peerRef.current.createDataChannel('sendChannel');
+    sendChannel.current.onopen = () => console.log('onopen');
+    sendChannel.current.onmessage = handleRecieveMessage
   }
 
   function createPeer(userID) {
-    console.log("Lager peer med id " + userID);
+    console.log('Lager peer med id ' + userID);
     const peer = new RTCPeerConnection({
       iceServers: [
         {
@@ -84,8 +103,19 @@ const Chat = () => {
 
     peer.onicecandidate = handleICECandidateEvent;
     peer.onnegotiationneeded = () => handleNegotiationNeededEvent(userID);
-
     return peer;
+  }
+
+  function handleRecieveMessage(e) {
+    setMessages(messages => [...messages, { yours: false, value: e.data }]);
+  }
+
+  function sendMessage() {
+    if(text.length) {
+    sendChannel.current.send(text);
+    setMessages(messages => [...messages, { yours: true, values: text }]);
+    setText('');
+    }
   }
 
   function handleNegotiationNeededEvent(userID) {
@@ -107,10 +137,14 @@ const Chat = () => {
 
   function handleOffer(incoming) {
     peerRef.current = createPeer();
+    peerRef.current.ondatachannel = (event) => {
+      sendChannel.current = event.channel;
+      sendChannel.current.onopen = () => console.log('onopen');
+      sendChannel.current.onmessage = handleRecieveMessage;
+    };
     const desc = new RTCSessionDescription(incoming.sdp);
     peerRef.current
       .setRemoteDescription(desc)
-      console.log(desc)
       .then(() => {})
       .then(() => {
         return peerRef.current.createAnswer();
@@ -130,12 +164,11 @@ const Chat = () => {
 
   function handleAnswer(message) {
     const desc = new RTCSessionDescription(message.sdp);
-    console.log(desc);
     peerRef.current.setRemoteDescription(desc).catch(e => console.log(e));
+    console.log('Skal være koblet sammen');
   }
 
   function handleICECandidateEvent(e) {
-    console.log(e);
     if (e.candidate) {
       const payload = {
         target: otherUser.current,
@@ -154,8 +187,17 @@ const Chat = () => {
   function handleChange(e) {
     setText(e.target.value);
   }
-  
-  return <Chatbox users={users} onUserClick={(user) => onUserClick(user)} />;
-}
+
+  return (
+    <Chatbox
+      users={users}
+      messages={messages}
+      text={text}
+      onUserClick={user => onUserClick(user)}
+      handleChange={e => handleChange(e)}
+      sendMessage={sendMessage()}
+    />
+  );
+};
 
 export default Chat;

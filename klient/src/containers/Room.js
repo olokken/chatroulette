@@ -1,15 +1,12 @@
-import React from "react";
-import { v1 as uuid } from "uuid";
+import React from 'react';
+import { v1 as uuid } from 'uuid';
 
-const CreateRoom = () => {
-    function create() {
-        const id = uuid();
-        history.push(`/room/${id}`);
-    }
+const Room = () => {
+  const history = useHistory();
+  const CreateRoom = () => {
+    
 
-    return (
-        <button onClick={create}>Create Room</button>
-    );
-}
-
+    return <button onClick={create}></button>;
+  };
+};
 export default CreateRoom;
