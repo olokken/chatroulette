@@ -122,7 +122,7 @@ const Chat = () => {
   function sendMessage() {
     if (text.length) {
       sendChannel.current.send(text);
-      setMessages(messages => [...messages, { yours: true, values: text }]);
+      setMessages(messages => [...messages, { yours: true, value: text }]);
       setText('');
     }
   }
@@ -208,8 +208,9 @@ const Chat = () => {
       text={text}
       onUserClick={user => onUserClick(user)}
       handleChange={e => handleChange(e)}
-      sendMessage={sendMessage()}
+      sendMessage = {sendMessage}
     />
+    
   );
 };
 

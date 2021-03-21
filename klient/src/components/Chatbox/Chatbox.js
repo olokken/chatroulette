@@ -18,7 +18,8 @@ const StyledOwnMessages = styled.div`
 
 const StyledMessages = styled.div`
   position: left;
-  width: 70%;
+  float:right;
+  width: 50%;
   height: relative;
   padding: 5px;
   background-color: none;
@@ -27,6 +28,19 @@ const StyledMessages = styled.div`
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
 `;
+
+const StyledMessagesPeer = styled.div`
+  position: left;
+  float:left;
+  width: 50%;
+  height: relative;
+  padding: 5px;
+  background-color: blue;
+  margin: 3px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+`; 
 
 const StyledSendMessage = styled.div``;
 const StyledLable = styled.div`
@@ -69,6 +83,18 @@ const StyledHeader = styled.h2`
   color: white;
 `;
 
+
+
+function checkMessage(message, index){
+    if(message.yours) {
+      console.log("min melding")
+      return (<StyledMessages key={index}>{message.value}</StyledMessages>)
+    } else {
+      return (<StyledMessagesPeer key = {index}>{message.value
+      }</StyledMessagesPeer>)
+    }
+  }
+
 const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage}) => {
   return (
     <Container>
@@ -79,20 +105,18 @@ const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage}
         <Grid item md={8}>
           <StyledChat>
             <StyledHeader>
-              <p>Du snakker med ....</p>
+              <p>Skriv inn din melding</p>
             </StyledHeader>
             <StyledMessageContainer>
-              {messages.map(message => (
-                <StyledMessages key = {message.data}>{message}</StyledMessages>
-              ))}
+              {messages.map(checkMessage)}
             </StyledMessageContainer>
             <StyledSendMessage>
               <TextField
                 style={{ width: '100%', marginBottom: 24, background: '#fff' }}
                 label="ENTER MESSAGE"
                 variant="outlined"
-                onChange = {handleChange}
                 value = {text}
+                onChange = {handleChange}
               />
               <Button
                 style={{ width: '100%' }}
