@@ -44,8 +44,8 @@ const Chat = () => {
       });
     });
 
-    socket.current.on('romInvitasjon', romID => {
-      setRoom(romID);
+    socket.current.on('romInvitasjon', romInfo => {
+      setRoom(romInfo.romID, romInfo.from);
     });
 
     socket.current.on('offer', handleOffer);
@@ -57,13 +57,14 @@ const Chat = () => {
 
   const onUserClick = toUser => {
     if (toUser.id !== socket.current.id) {
+      otherUser.current = toUser.id;
       console.log('USER CLCKED', toUser);
       let romID = createRoom();
       const romInfo = {
         target: toUser.id,
+        from: socket.current.id,
         romID: romID
       };
-      startSamtale(toUser.id, romID);
       socket.current.emit('roomID', romInfo);
     } else {
       console.log('Du kan ikke snakke med deg selv');
@@ -76,45 +77,53 @@ const Chat = () => {
     return id;
   }
 
-  function setRoom(id) {
-    let vilSnakke = window.confirm('Vil du snakke');
+  function setRoom(id, from) {
+    let vilSnakke = window.confirm('Vil du snakke med' + from);
     if (vilSnakke) {
+      otherUser.current = from;
       history.push(`/chat/${id}`);
+      startSamtale(from);
     }
   }
 
   function startSamtale(userID) {
-    console.log('Starter samtale');
-    peerRef.current = createPeer(userID);;
+    console.log('1: Starter samtale');
+    peerRef.current = createPeer(userID);
     sendChannel.current = peerRef.current.createDataChannel('sendChannel');
-    sendChannel.current.onopen = () => console.log('onopen');
-    sendChannel.current.onmessage = handleRecieveMessage
+    console.log("Jeg oppretter connection");
+    sendChannel.current.onopen = handleOnOpen;
+    sendChannel.current.onmessage = handleReceiveMessage;
+  }
+
+  function handleOnOpen() {
+    console.log('onopen');
+    console.log(sendChannel.current);
   }
 
   function createPeer(userID) {
-    console.log('Lager peer med id ' + userID);
+    console.log('2: Lager peer med id ' + userID);
     const peer = new RTCPeerConnection({
       iceServers: [
         {
-          urls: 'stun:stun1.l.google.com:19302'
+          urls: 'stun:stun.stunprotocol.org'
         }
       ]
     });
-
     peer.onicecandidate = handleICECandidateEvent;
     peer.onnegotiationneeded = () => handleNegotiationNeededEvent(userID);
+    console.log(peer);
     return peer;
   }
 
-  function handleRecieveMessage(e) {
+  function handleReceiveMessage(e) {
     setMessages(messages => [...messages, { yours: false, value: e.data }]);
   }
 
   function sendMessage() {
-    if(text.length) {
-    sendChannel.current.send(text);
-    setMessages(messages => [...messages, { yours: true, values: text }]);
-    setText('');
+    if (text.length) {
+      sendChannel.current.send(text);
+      setMessages(messages => [...messages, { yours: true, values: text }]);
+      setText('');
     }
   }
 
@@ -136,11 +145,13 @@ const Chat = () => {
   }
 
   function handleOffer(incoming) {
+    console.log("6: offer");
     peerRef.current = createPeer();
     peerRef.current.ondatachannel = (event) => {
+      console.log("plis")
       sendChannel.current = event.channel;
-      sendChannel.current.onopen = () => console.log('onopen');
-      sendChannel.current.onmessage = handleRecieveMessage;
+      sendChannel.current.onopen = handleOnOpen;
+      sendChannel.current.onmessage = handleReceiveMessage;
     };
     const desc = new RTCSessionDescription(incoming.sdp);
     peerRef.current
@@ -170,17 +181,19 @@ const Chat = () => {
 
   function handleICECandidateEvent(e) {
     if (e.candidate) {
+      console.log("4 er kandidat")
       const payload = {
         target: otherUser.current,
         candidate: e.candidate
       };
+      console.log(payload.target);
       socket.current.emit('ice-candidate', payload);
     }
   }
 
   function handleNewICECandidateMsg(incoming) {
     const candidate = new RTCIceCandidate(incoming);
-
+    console.log("5 : " + candidate);
     peerRef.current.addIceCandidate(candidate).catch(e => console.log(e));
   }
 

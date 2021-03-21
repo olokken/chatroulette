@@ -1,16 +1,15 @@
-var express = require('express'); 
-var socket = require('socket.io'); 
+const express = require('express'); 
+const socket = require('socket.io'); 
 //App setup
 
-var app = express(); 
-var server = app.listen(8001, function() {
+const app = express(); 
+const server = app.listen(8001, function() {
     console.log('Listening on port 8001'); 
 });
 
 const users = []; 
 
-var io = socket(server); 
-let my_id;
+const io = socket(server); 
 
 io.on('connection', (client) => {
 
@@ -19,7 +18,6 @@ io.on('connection', (client) => {
             "name": username, 
             "id": client.id,
         }; 
-        my_id = client.id;
         users.push(user); 
         //console.log("Bruker sin id: " + user['id']); 
         //console.log("Din id = " + client.id);
@@ -45,12 +43,12 @@ io.on('connection', (client) => {
         io.to(payload.target).emit("answer", payload);
     });
 
-    client.on("ice-candidate", incoming => {
-        io.to(incoming.target).emit("ice-candidate", incoming.candidate);
+    client.on('ice-candidate', incoming => {
+        io.to(incoming.target).emit('ice-candidate', incoming.candidate);
     });    
 
     client.on("roomID", romInfo => {
-        io.to(romInfo.target).emit("romInvitasjon",  romInfo.romID);
+        io.to(romInfo.target).emit("romInvitasjon",  romInfo);
     })
 
 });

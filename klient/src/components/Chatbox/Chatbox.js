@@ -69,7 +69,7 @@ const StyledHeader = styled.h2`
   color: white;
 `;
 
-const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage }) => {
+const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage}) => {
   return (
     <Container>
       <Grid className="h100" container>
@@ -83,7 +83,7 @@ const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage 
             </StyledHeader>
             <StyledMessageContainer>
               {messages.map(message => (
-                <StyledMessages>{message}</StyledMessages>
+                <StyledMessages key = {message.data}>{message}</StyledMessages>
               ))}
             </StyledMessageContainer>
             <StyledSendMessage>
