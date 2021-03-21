@@ -1,31 +1,3 @@
-<<<<<<< HEAD
-require('dotenv').config(); 
-const express = require('express'); 
-const socket = require('socket.io'); 
-const os = require("os");
-const path = require('path'); 
- 
-
-
-//App setup
-
-var app = express(); 
-
-app.use(express.static(path.join('../klient/build/')));
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join('../klient/build/index.html')); 
-}); 
-
-
-
-const port = process.env.PORT || 3000; 
-console.log(port); 
-var server = app.listen(port, function() {
-    console.log('Listening on port ' + port); 
-    //console.log(os.hostname());
-    //console.log(server.address());
-=======
 const express = require('express'); 
 const socket = require('socket.io'); 
 //App setup
@@ -33,7 +5,6 @@ const socket = require('socket.io');
 const app = express(); 
 const server = app.listen(8001, function() {
     console.log('Listening on port 8001'); 
->>>>>>> WebRTC
 });
 
 const users = []; 
@@ -72,14 +43,9 @@ io.on('connection', (client) => {
         io.to(payload.target).emit("answer", payload);
     });
 
-<<<<<<< HEAD
-        console.log("Min ID er: " + my_id); 
-        console.log("Din ID = " + toUser.id);
-=======
     client.on('ice-candidate', incoming => {
         io.to(incoming.target).emit('ice-candidate', incoming.candidate);
     });    
->>>>>>> WebRTC
 
     client.on("roomID", romInfo => {
         io.to(romInfo.target).emit("romInvitasjon",  romInfo);

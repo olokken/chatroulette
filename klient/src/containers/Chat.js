@@ -12,25 +12,6 @@ const Chat = () => {
   const history = useHistory();
   const [users, setUsers] = useState([]);
   const { authState } = useContext(AuthContext);
-<<<<<<< HEAD
-
-  let offer;
-
-  const socketRef = useRef();
-  
-
-  useEffect(() => {
-
-    socketRef.current = io('/', {
-    transports: ["websocket", "polling"]
-  }); 
-
-    socketRef.current.on('connect', () => {
-      socketRef.current.emit('username', authState.username); 
-    })
-
-    socketRef.current.on("users", users => {
-=======
   const sendChannel = useRef();
   const socket = useRef();
   const peerRef = useRef();
@@ -48,27 +29,16 @@ const Chat = () => {
     });
 
     socket.current.on('users', users => {
->>>>>>> WebRTC
       setUsers(users);
       console.log(users);
     });
 
-<<<<<<< HEAD
-    socketRef.current.on("connected", user => {
-      setUsers([...users, user]);
-      console.log(users)
-    });
-
-    socketRef.current.on("disconnected", id => {
-      console.log(id); 
-=======
     socket.current.on('connected', user => {
       console.log(user.name + ' conneceted');
     });
 
     socket.current.on('disconnected', id => {
       console.log(id);
->>>>>>> WebRTC
       setUsers(users => {
         return users.filter(user => user.id !== id);
       });
@@ -155,14 +125,6 @@ const Chat = () => {
       setMessages(messages => [...messages, { yours: true, value: text }]);
       setText('');
     }
-<<<<<<< HEAD
-    
-    WebRTCConnection.createOffer().then((localDescription) => {
-      WebRTCConnection.setLocalDescription(localDescription);
-    });
-
-    setTimeout(() => { socketRef.current.emit('offer', offer, toUser); }, 250);
-=======
   }
 
   function handleNegotiationNeededEvent(userID) {
@@ -234,7 +196,6 @@ const Chat = () => {
     console.log("5 : " + candidate);
     peerRef.current.addIceCandidate(candidate).catch(e => console.log(e));
   }
->>>>>>> WebRTC
 
   function handleChange(e) {
     setText(e.target.value);
