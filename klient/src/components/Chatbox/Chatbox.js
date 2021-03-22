@@ -16,7 +16,7 @@ const StyledOwnMessages = styled.div`
   margin: 3px;
 `;
 
-const StyledMessages = styled.div`
+const StyledMessages = styled.fieldset`
   position: left;
   float:right;
   width: 50%;
@@ -29,7 +29,7 @@ const StyledMessages = styled.div`
   border-radius: 10px;
 `;
 
-const StyledMessagesPeer = styled.div`
+const StyledMessagesPeer = styled.fieldset`
   position: left;
   float:left;
   width: 50%;
@@ -88,10 +88,19 @@ const StyledHeader = styled.h2`
 function checkMessage(message, index){
     if(message.yours) {
       console.log("min melding")
-      return (<StyledMessages key={index}>{message.value}</StyledMessages>)
+      return (
+        
+        <StyledMessages key={index}>
+         <legend>{}</legend> {message.value}
+        </StyledMessages>
+    )
     } else {
-      return (<StyledMessagesPeer key = {index}>{message.value
-      }</StyledMessagesPeer>)
+      return (
+          <StyledMessagesPeer key = {index}>
+            <legend>yousss</legend>{message.value}
+          </StyledMessagesPeer>
+      
+      )
     }
   }
 
