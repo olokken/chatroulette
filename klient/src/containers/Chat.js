@@ -201,6 +201,12 @@ const Chat = () => {
     setText(e.target.value);
   }
 
+  const onKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      sendMessage();
+    }
+  }
+
   return (
     <Chatbox
       users={users}
@@ -209,6 +215,7 @@ const Chat = () => {
       onUserClick={user => onUserClick(user)}
       handleChange={e => handleChange(e)}
       sendMessage = {sendMessage}
+      onKeyDown = {onKeyDown}
     />
     
   );

@@ -27,11 +27,16 @@ const Login = () => {
     history.push('/chat');
   }
 
+  const onKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      onLogin();
+    }
+  }
 
 
   return (
     <LoginContainer>
-      <LoginCard onLogin = {onLogin} onChange = {onChange}></LoginCard>
+      <LoginCard   onKeyDown={onKeyDown} onLogin = {onLogin} onChange = {onChange}></LoginCard>
     </LoginContainer>
   );
 };

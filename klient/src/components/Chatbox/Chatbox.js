@@ -95,7 +95,7 @@ function checkMessage(message, index){
     }
   }
 
-const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage}) => {
+const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage, onKeyDown}) => {
   return (
     <Container>
       <Grid className="h100" container>
@@ -117,6 +117,7 @@ const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage}
                 variant="outlined"
                 value = {text}
                 onChange = {handleChange}
+                onKeyDown = {onKeyDown}
               />
               <Button
                 style={{ width: '100%' }}
