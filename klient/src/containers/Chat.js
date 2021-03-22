@@ -216,6 +216,7 @@ const Chat = () => {
       handleChange={e => handleChange(e)}
       sendMessage = {sendMessage}
       onKeyDown = {onKeyDown}
+      otherUser = {otherUser.current}
     />
     
   );

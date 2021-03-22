@@ -95,7 +95,17 @@ function checkMessage(message, index){
     }
   }
 
-const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage, onKeyDown}) => {
+function getOtherUserName(users,otherUser){
+  let otherUserName = '';
+  users.forEach(x => {
+    if(x.id == otherUser){
+        otherUserName = x.name;
+    }
+  })
+  return otherUserName;
+}
+
+const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage, onKeyDown, otherUser}) => {
   return (
     <Container>
       <Grid className="h100" container>
@@ -105,7 +115,7 @@ const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage,
         <Grid item md={8}>
           <StyledChat>
             <StyledHeader>
-              <p>Skriv inn din melding</p>
+              <p>Du snakker med {getOtherUserName(users, otherUser)}</p>
             </StyledHeader>
             <StyledMessageContainer>
               {messages.map(checkMessage)}
