@@ -48,6 +48,13 @@ const Chat = () => {
       setRoom(romInfo.romID, romInfo.from);
     });
 
+    socket.current.on('akseptert', id => {
+      akseptertRom(id);
+      alert('Dere er nå connected');
+    });
+
+    socket.current.on('avslaatt', giAvslaattBeskjed);
+
     socket.current.on('offer', handleOffer);
 
     socket.current.on('answer', handleAnswer);
@@ -71,10 +78,17 @@ const Chat = () => {
     }
   };
 
+  function giAvslaattBeskjed() {
+    console.log("koffor e eg her")
+    alert("Kunne ikke akseptere")
+  }
   function createRoom() {
     const id = uuid();
-    history.push(`/chat/${id}`);
     return id;
+  }
+
+  function akseptertRom(id) {
+    history.push(`/chat/${id}`);
   }
 
   function setRoom(id, from) {
@@ -83,14 +97,19 @@ const Chat = () => {
       otherUser.current = from;
       history.push(`/chat/${id}`);
       startSamtale(from);
+      let svar = {
+        id: id,
+        from: from
+      };
+      socket.current.emit('akseptert', svar);
+    } else {
+      socket.current.emit('avslaa', from);
     }
   }
 
   function startSamtale(userID) {
-    console.log('1: Starter samtale');
     peerRef.current = createPeer(userID);
     sendChannel.current = peerRef.current.createDataChannel('sendChannel');
-    console.log("Jeg oppretter connection");
     sendChannel.current.onopen = handleOnOpen;
     sendChannel.current.onmessage = handleReceiveMessage;
   }
@@ -101,7 +120,6 @@ const Chat = () => {
   }
 
   function createPeer(userID) {
-    console.log('2: Lager peer med id ' + userID);
     const peer = new RTCPeerConnection({
       iceServers: [
         {
@@ -111,7 +129,6 @@ const Chat = () => {
     });
     peer.onicecandidate = handleICECandidateEvent;
     peer.onnegotiationneeded = () => handleNegotiationNeededEvent(userID);
-    console.log(peer);
     return peer;
   }
 
@@ -145,10 +162,8 @@ const Chat = () => {
   }
 
   function handleOffer(incoming) {
-    console.log("6: offer");
     peerRef.current = createPeer();
-    peerRef.current.ondatachannel = (event) => {
-      console.log("plis")
+    peerRef.current.ondatachannel = event => {
       sendChannel.current = event.channel;
       sendChannel.current.onopen = handleOnOpen;
       sendChannel.current.onmessage = handleReceiveMessage;
@@ -176,24 +191,20 @@ const Chat = () => {
   function handleAnswer(message) {
     const desc = new RTCSessionDescription(message.sdp);
     peerRef.current.setRemoteDescription(desc).catch(e => console.log(e));
-    console.log('Skal være koblet sammen');
   }
 
   function handleICECandidateEvent(e) {
     if (e.candidate) {
-      console.log("4 er kandidat")
       const payload = {
         target: otherUser.current,
         candidate: e.candidate
       };
-      console.log(payload.target);
       socket.current.emit('ice-candidate', payload);
     }
   }
 
   function handleNewICECandidateMsg(incoming) {
     const candidate = new RTCIceCandidate(incoming);
-    console.log("5 : " + candidate);
     peerRef.current.addIceCandidate(candidate).catch(e => console.log(e));
   }
 
@@ -201,11 +212,11 @@ const Chat = () => {
     setText(e.target.value);
   }
 
-  const onKeyDown = (e) => {
+  const onKeyDown = e => {
     if (e.keyCode === 13) {
       sendMessage();
     }
-  }
+  };
 
   return (
     <Chatbox
@@ -214,11 +225,10 @@ const Chat = () => {
       text={text}
       onUserClick={user => onUserClick(user)}
       handleChange={e => handleChange(e)}
-      sendMessage = {sendMessage}
-      onKeyDown = {onKeyDown}
-      otherUser = {otherUser.current}
+      sendMessage={sendMessage}
+      onKeyDown={onKeyDown}
+      otherUser={otherUser.current}
     />
-    
   );
 };
 
