@@ -45,11 +45,13 @@ const StyledMessagesPeer = styled.fieldset`
 const StyledSendMessage = styled.div``;
 const StyledLable = styled.div`
   font-size: small;
+  
 `;
 
 const StyledMessageContainer = styled.div`
   color: white;
   width: 100%;
+  
   height: 40vh;
   overflow: hidden;
   overflow-y: scroll;
@@ -66,6 +68,9 @@ const StyledMessageContainer = styled.div`
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
   }
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
 `;
 
 const StyledChat = styled.div`
@@ -75,6 +80,8 @@ const StyledChat = styled.div`
   justify-content: space-between;
   height: 80%;
   padding: 3rem;
+
+
 `;
 
 const StyledHeader = styled.h2`
@@ -82,7 +89,6 @@ const StyledHeader = styled.h2`
   margin: 0px;
   color: white;
 `;
-
 
 
 function checkMessage(message, index){
@@ -104,7 +110,17 @@ function checkMessage(message, index){
     }
   }
 
-const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage, onKeyDown}) => {
+function getOtherUserName(users,otherUser){
+  let otherUserName = '';
+  users.forEach(x => {
+    if(x.id == otherUser){
+        otherUserName = x.name;
+    }
+  })
+  return otherUserName;
+}
+
+const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage, onKeyDown, otherUser}) => {
   return (
     <Container>
       <Grid className="h100" container>
@@ -114,7 +130,7 @@ const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage,
         <Grid item md={8}>
           <StyledChat>
             <StyledHeader>
-              <p>Skriv inn din melding</p>
+              <p>Du snakker med {getOtherUserName(users, otherUser)}</p>
             </StyledHeader>
             <StyledMessageContainer>
               {messages.map(checkMessage)}
