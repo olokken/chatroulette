@@ -94,12 +94,12 @@ const StyledHeader = styled.h2`
 function checkMessage(message, index, users, otherUser, myID){
     let you = getUserName(users, otherUser)
     let me = getUserName(users, myID)
+    pushDownScrollbar()
     if(message.yours) {
       console.log("min melding")
       return (
-        
         <StyledMessages key={index}>
-         <legend>{me}</legend> {message.value}
+         <legend>{me}</legend>{message.value}
         </StyledMessages>
     )
     } else {
@@ -107,7 +107,6 @@ function checkMessage(message, index, users, otherUser, myID){
           <StyledMessagesPeer key = {index}>
             <legend>{you}</legend>{message.value}
           </StyledMessagesPeer>
-      
       )
     }
   }
@@ -120,6 +119,12 @@ function getUserName(users,id){
     }
   })
   return otherUserName;
+}
+
+function pushDownScrollbar(){
+  setTimeout(() => {
+        document.getElementById("hei").scrollTop = document.getElementById("hei").scrollHeight 
+      }, 1);
 }
 
 
@@ -135,7 +140,7 @@ const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage,
             <StyledHeader>
               <p>Du snakker med {getUserName(users, otherUser)}</p>
             </StyledHeader>
-            <StyledMessageContainer>
+            <StyledMessageContainer id="hei">
               {messages.map((message, index) => (
                 checkMessage(message, index, users, otherUser, myID)
               ))

@@ -143,6 +143,9 @@ const Chat = () => {
       sendChannel.current.send(text);
       setMessages(messages => [...messages, { yours: true, value: text }]);
       setText('');
+      setTimeout(() => {
+        document.getElementById("hei").scrollTop = document.getElementById("hei").scrollHeight 
+      }, 1);
     }
   }
 
