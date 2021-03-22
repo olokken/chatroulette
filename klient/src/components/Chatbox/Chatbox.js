@@ -136,7 +136,10 @@ const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage,
               <p>Du snakker med {getUserName(users, otherUser)}</p>
             </StyledHeader>
             <StyledMessageContainer>
-              {messages.map(checkMessage)}
+              {messages.map((message, index) => (
+                checkMessage(message, index, users, otherUser, myID)
+              ))
+              }
             </StyledMessageContainer>
             <StyledSendMessage>
               <TextField

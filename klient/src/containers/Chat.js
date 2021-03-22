@@ -18,6 +18,7 @@ const Chat = () => {
   const otherUser = useRef();
   const [text, setText] = useState('');
   const [messages, setMessages] = useState([]);
+  const myID = useRef();
 
   useEffect(() => {
     socket.current = io('http://localhost:8001', {
@@ -25,6 +26,7 @@ const Chat = () => {
     });
 
     socket.current.on('connect', () => {
+      myID.current = socket.current.id;
       socket.current.emit('username', authState.username);
     });
 
@@ -228,7 +230,7 @@ const Chat = () => {
       sendMessage={sendMessage}
       onKeyDown={onKeyDown}
       otherUser={otherUser.current}
-      myID= {socket.current.id}
+      myID= {myID.current}
     />
   );
 };
