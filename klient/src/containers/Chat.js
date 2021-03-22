@@ -228,6 +228,7 @@ const Chat = () => {
       sendMessage={sendMessage}
       onKeyDown={onKeyDown}
       otherUser={otherUser.current}
+      myID= {socket.current.id}
     />
   );
 };

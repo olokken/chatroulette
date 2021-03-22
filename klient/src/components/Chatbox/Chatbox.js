@@ -91,36 +91,39 @@ const StyledHeader = styled.h2`
 `;
 
 
-function checkMessage(message, index){
+function checkMessage(message, index, users, otherUser, myID){
+    let you = getUserName(users, otherUser)
+    let me = getUserName(users, myID)
     if(message.yours) {
       console.log("min melding")
       return (
         
         <StyledMessages key={index}>
-         <legend>{}</legend> {message.value}
+         <legend>{me}</legend> {message.value}
         </StyledMessages>
     )
     } else {
       return (
           <StyledMessagesPeer key = {index}>
-            <legend>yousss</legend>{message.value}
+            <legend>{you}</legend>{message.value}
           </StyledMessagesPeer>
       
       )
     }
   }
 
-function getOtherUserName(users,otherUser){
+function getUserName(users,id){
   let otherUserName = '';
   users.forEach(x => {
-    if(x.id == otherUser){
+    if(x.id == id){
         otherUserName = x.name;
     }
   })
   return otherUserName;
 }
 
-const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage, onKeyDown, otherUser}) => {
+
+const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage, onKeyDown, otherUser,myID}) => {
   return (
     <Container>
       <Grid className="h100" container>
@@ -130,7 +133,7 @@ const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage,
         <Grid item md={8}>
           <StyledChat>
             <StyledHeader>
-              <p>Du snakker med {getOtherUserName(users, otherUser)}</p>
+              <p>Du snakker med {getUserName(users, otherUser)}</p>
             </StyledHeader>
             <StyledMessageContainer>
               {messages.map(checkMessage)}
