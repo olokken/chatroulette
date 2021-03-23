@@ -50,7 +50,7 @@ const Chat = () => {
     });
 
     socket.current.on('romInvitasjon', romInfo => {
-      setRoom(romInfo.romID, romInfo.from);
+      setRoom(romInfo.romID, romInfo.from, romInfo.name);
     });
 
     socket.current.on('akseptert', id => {
@@ -76,7 +76,8 @@ const Chat = () => {
       const romInfo = {
         target: toUser.id,
         from: socket.current.id,
-        romID: romID
+        romID: romID,
+        name: authState.username
       };
       socket.current.emit('roomID', romInfo);
     } else {
@@ -103,10 +104,10 @@ const Chat = () => {
     history.push(`/chat/${id}`);
   }
 
-  function setRoom(id, from) {
+  function setRoom(id, from, name) {
     try {
     //Får problemer med window.confirm i chrome pga. adblock
-    let vilSnakke = window.confirm('Vil du snakke med' + from);
+    let vilSnakke = window.confirm(name + ' vil snakke med deg!\nTrykk OK for å godta, og Avbryt for å avslå');
     if (vilSnakke) {
       if(otherUser.current != null) {
         socket.current.emit('forlat', otherUser.current);
