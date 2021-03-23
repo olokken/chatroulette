@@ -104,6 +104,8 @@ const Chat = () => {
   }
 
   function setRoom(id, from) {
+    try {
+    //Får problemer med window.confirm i chrome pga. adblock
     let vilSnakke = window.confirm('Vil du snakke med' + from);
     if (vilSnakke) {
       if(otherUser.current != null) {
@@ -117,9 +119,14 @@ const Chat = () => {
         from: from
       };
       socket.current.emit('akseptert', svar);
-    } else {
+    } else if (!vilSnakke) {
       socket.current.emit('avslaa', from);
+    } else {
+      console.log("Noe gikk galt")
     }
+  } catch(e) {
+    console.log(e.message);
+  }
   }
 
   function startSamtale(userID) {
@@ -132,7 +139,6 @@ const Chat = () => {
 
   function handleOnOpen() {
     console.log('onopen');
-    console.log(sendChannel.current);
   }
 
   function createPeer(userID) {
