@@ -177,6 +177,7 @@ const Chat = () => {
     peerRef.current
       .createOffer()
       .then(offer => {
+        console.log(offer);
         return peerRef.current.setLocalDescription(offer);
       })
       .then(() => {
@@ -223,6 +224,7 @@ const Chat = () => {
   }
 
   function handleICECandidateEvent(e) {
+    console.log("Ice candidate")
     if (e.candidate) {
       const payload = {
         target: otherUser.current,
