@@ -206,6 +206,7 @@ const Chat = () => {
         return peerRef.current.createAnswer();
       })
       .then(answer => {
+        console.log(answer);
         return peerRef.current.setLocalDescription(answer);
       })
       .then(() => {
@@ -220,6 +221,7 @@ const Chat = () => {
 
   function handleAnswer(message) {
     const desc = new RTCSessionDescription(message.sdp);
+    console.log(desc);
     peerRef.current.setRemoteDescription(desc).catch(e => console.log(e));
   }
 
