@@ -149,7 +149,7 @@ const Chat = () => {
     const peer = new RTCPeerConnection({
       iceServers: [
         {
-          urls: 'stun:chatroulette123-stun.herokuapp'
+          urls: 'stun:chatroulette123-stun.herokuapp.com'
         }
       ]
     });
@@ -221,7 +221,7 @@ const Chat = () => {
 
   function handleAnswer(message) {
     const desc = new RTCSessionDescription(message.sdp);
-    console.log(desc);
+    console.log("svar: " + desc);
     peerRef.current.setRemoteDescription(desc).catch(e => console.log(e));
   }
 
