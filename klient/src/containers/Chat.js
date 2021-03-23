@@ -52,7 +52,6 @@ const Chat = () => {
 
     socket.current.on('akseptert', id => {
       akseptertRom(id);
-      alert('Dere er nå connected');
     });
 
     socket.current.on('avslaatt', giAvslaattBeskjed);
@@ -81,9 +80,9 @@ const Chat = () => {
   };
 
   function giAvslaattBeskjed() {
-    console.log("koffor e eg her")
     alert("Kunne ikke akseptere")
   }
+
   function createRoom() {
     const id = uuid();
     return id;
@@ -110,6 +109,7 @@ const Chat = () => {
   }
 
   function startSamtale(userID) {
+    setMessages([])
     peerRef.current = createPeer(userID);
     sendChannel.current = peerRef.current.createDataChannel('sendChannel');
     sendChannel.current.onopen = handleOnOpen;
@@ -143,10 +143,10 @@ const Chat = () => {
       sendChannel.current.send(text);
       setMessages(messages => [...messages, { yours: true, value: text }]);
       setText('');
-      setTimeout(() => {
-        document.getElementById("hei").scrollTop = document.getElementById("hei").scrollHeight 
-      }, 1);
     }
+    setTimeout(() => {
+      document.getElementById("hei").scrollTop = document.getElementById("hei").scrollHeight 
+    }, 1);
   }
 
   function handleNegotiationNeededEvent(userID) {
