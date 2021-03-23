@@ -59,5 +59,9 @@ io.on('connection', (client) => {
         io.to(from).emit("avslaatt")
     });
 
+    client.on('forlat', id => {
+        io.to(id).emit('forlot')
+    })
+
 });
 

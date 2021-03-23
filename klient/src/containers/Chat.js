@@ -40,7 +40,10 @@ const Chat = () => {
     });
 
     socket.current.on('disconnected', id => {
-      console.log(id);
+      console.log("disconnected:" + id);
+      if(otherUser.current == id) {
+        socket.current.emit('forlat', socket.current.id);
+      }
       setUsers(users => {
         return users.filter(user => user.id !== id);
       });
@@ -53,6 +56,8 @@ const Chat = () => {
     socket.current.on('akseptert', id => {
       akseptertRom(id);
     });
+
+    socket.current.on('forlot', tilbakeStill);
 
     socket.current.on('avslaatt', giAvslaattBeskjed);
 
@@ -79,6 +84,12 @@ const Chat = () => {
     }
   };
 
+  function tilbakeStill() {
+    setMessages([]);
+    history.push('/chat');
+    otherUser.current = null;
+    alert("Motparten forlot samtalen");
+  }
   function giAvslaattBeskjed() {
     alert("Kunne ikke akseptere")
   }
@@ -95,6 +106,9 @@ const Chat = () => {
   function setRoom(id, from) {
     let vilSnakke = window.confirm('Vil du snakke med' + from);
     if (vilSnakke) {
+      if(otherUser.current != null) {
+        socket.current.emit('forlat', otherUser.current);
+      }
       otherUser.current = from;
       history.push(`/chat/${id}`);
       startSamtale(from);
