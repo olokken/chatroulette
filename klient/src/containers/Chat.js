@@ -16,8 +16,10 @@ const Chat = () => {
   const socket = useRef();
   const peerRef = useRef();
   const otherUser = useRef();
+  const otherUserName = useRef();
   const [text, setText] = useState('');
   const [messages, setMessages] = useState([]);
+  const myID = useRef();
 
   useEffect(() => {
     socket.current = io('/', {
@@ -25,6 +27,7 @@ const Chat = () => {
     });
 
     socket.current.on('connect', () => {
+      myID.current = socket.current.id;
       socket.current.emit('username', authState.username);
     });
 
@@ -38,15 +41,26 @@ const Chat = () => {
     });
 
     socket.current.on('disconnected', id => {
-      console.log(id);
+      console.log("disconnected:" + id);
+      if(otherUser.current == id) {
+        socket.current.emit('forlat', socket.current.id);
+      }
       setUsers(users => {
         return users.filter(user => user.id !== id);
       });
     });
 
     socket.current.on('romInvitasjon', romInfo => {
-      setRoom(romInfo.romID, romInfo.from);
+      setRoom(romInfo.romID, romInfo.from, romInfo.name);
     });
+
+    socket.current.on('akseptert', id => {
+      akseptertRom(id);
+    });
+
+    socket.current.on('forlot', tilbakeStill);
+
+    socket.current.on('avslaatt', giAvslaattBeskjed);
 
     socket.current.on('offer', handleOffer);
 
@@ -63,7 +77,8 @@ const Chat = () => {
       const romInfo = {
         target: toUser.id,
         from: socket.current.id,
-        romID: romID
+        romID: romID,
+        name: authState.username
       };
       socket.current.emit('roomID', romInfo);
     } else {
@@ -71,37 +86,66 @@ const Chat = () => {
     }
   };
 
+  function tilbakeStill() {
+    setMessages([]);
+    history.push('/chat');
+    otherUser.current = null;
+    alert(otherUserName.current + " forlot samtalen");
+    otherUserName.current = null;
+  }
+  function giAvslaattBeskjed() {
+    alert("Kunne ikke akseptere")
+  }
+
   function createRoom() {
     const id = uuid();
-    history.push(`/chat/${id}`);
     return id;
   }
 
-  function setRoom(id, from) {
-    let vilSnakke = window.confirm('Vil du snakke med' + from);
+  function akseptertRom(id) {
+    history.push(`/chat/${id}`);
+  }
+
+  function setRoom(id, from, name) {
+    try {
+    //Får problemer med window.confirm i chrome pga. adblock
+    otherUserName.current = name;
+    let vilSnakke = window.confirm(otherUserName.current + ' vil snakke med deg!\nTrykk OK for å godta, og Avbryt for å avslå');
     if (vilSnakke) {
+      if(otherUser.current != null) {
+        socket.current.emit('forlat', otherUser.current);
+      }
       otherUser.current = from;
       history.push(`/chat/${id}`);
       startSamtale(from);
+      let svar = {
+        id: id,
+        from: from
+      };
+      socket.current.emit('akseptert', svar);
+    } else if (!vilSnakke) {
+      socket.current.emit('avslaa', from);
+    } else {
+      console.log("Noe gikk galt")
     }
+  } catch(e) {
+    console.log(e.message);
+  }
   }
 
   function startSamtale(userID) {
-    console.log('1: Starter samtale');
+    setMessages([])
     peerRef.current = createPeer(userID);
     sendChannel.current = peerRef.current.createDataChannel('sendChannel');
-    console.log("Jeg oppretter connection");
     sendChannel.current.onopen = handleOnOpen;
     sendChannel.current.onmessage = handleReceiveMessage;
   }
 
   function handleOnOpen() {
     console.log('onopen');
-    console.log(sendChannel.current);
   }
 
   function createPeer(userID) {
-    console.log('2: Lager peer med id ' + userID);
     const peer = new RTCPeerConnection({
       iceServers: [
         {
@@ -111,7 +155,6 @@ const Chat = () => {
     });
     peer.onicecandidate = handleICECandidateEvent;
     peer.onnegotiationneeded = () => handleNegotiationNeededEvent(userID);
-    console.log(peer);
     return peer;
   }
 
@@ -125,6 +168,9 @@ const Chat = () => {
       setMessages(messages => [...messages, { yours: true, value: text }]);
       setText('');
     }
+    setTimeout(() => {
+      document.getElementById("hei").scrollTop = document.getElementById("hei").scrollHeight 
+    }, 1);
   }
 
   function handleNegotiationNeededEvent(userID) {
@@ -145,10 +191,8 @@ const Chat = () => {
   }
 
   function handleOffer(incoming) {
-    console.log("6: offer");
     peerRef.current = createPeer();
-    peerRef.current.ondatachannel = (event) => {
-      console.log("plis")
+    peerRef.current.ondatachannel = event => {
       sendChannel.current = event.channel;
       sendChannel.current.onopen = handleOnOpen;
       sendChannel.current.onmessage = handleReceiveMessage;
@@ -176,30 +220,32 @@ const Chat = () => {
   function handleAnswer(message) {
     const desc = new RTCSessionDescription(message.sdp);
     peerRef.current.setRemoteDescription(desc).catch(e => console.log(e));
-    console.log('Skal være koblet sammen');
   }
 
   function handleICECandidateEvent(e) {
     if (e.candidate) {
-      console.log("4 er kandidat")
       const payload = {
         target: otherUser.current,
         candidate: e.candidate
       };
-      console.log(payload.target);
       socket.current.emit('ice-candidate', payload);
     }
   }
 
   function handleNewICECandidateMsg(incoming) {
     const candidate = new RTCIceCandidate(incoming);
-    console.log("5 : " + candidate);
     peerRef.current.addIceCandidate(candidate).catch(e => console.log(e));
   }
 
   function handleChange(e) {
     setText(e.target.value);
   }
+
+  const onKeyDown = e => {
+    if (e.keyCode === 13) {
+      sendMessage();
+    }
+  };
 
   return (
     <Chatbox
@@ -208,9 +254,11 @@ const Chat = () => {
       text={text}
       onUserClick={user => onUserClick(user)}
       handleChange={e => handleChange(e)}
-      sendMessage = {sendMessage}
+      sendMessage={sendMessage}
+      onKeyDown={onKeyDown}
+      otherUser={otherUser.current}
+      myID= {myID.current}
     />
-    
   );
 };
 

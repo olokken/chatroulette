@@ -57,6 +57,18 @@ io.on('connection', (client) => {
 
     client.on("roomID", romInfo => {
         io.to(romInfo.target).emit("romInvitasjon",  romInfo);
+    });
+
+    client.on("akseptert", svar => {
+        io.to(svar.from).emit("akseptert", svar.id);
+    });
+
+    client.on("avslaa", from => { 
+        io.to(from).emit("avslaatt")
+    });
+
+    client.on('forlat', id => {
+        io.to(id).emit('forlot')
     })
 
 });

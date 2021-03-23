@@ -24,6 +24,7 @@ const LoginCard = props => {
         style={{ width: '100%', marginBottom: 24 }}
         label="Username"
         onChange={props.onChange}
+        onKeyDown={props.onKeyDown}
         variant="outlined"
       />
       <Button

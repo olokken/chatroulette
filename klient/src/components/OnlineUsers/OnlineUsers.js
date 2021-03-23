@@ -4,9 +4,12 @@ import { TextField } from '@material-ui/core';
 
 const StyledDiv = styled.div`
   //border-right: ridge grey 1px;
-  min-width: 60%;
+  max-width: 60%;
   min-height: 100%;
   border-radius: 0px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+
 `;
 
 const StyledSearchBar = styled.input`
@@ -20,8 +23,9 @@ const StyledSearchBar = styled.input`
 
 const StyledUsers = styled.div`
   margin-top: 20px;
-  padding:6px;
+  padding:5px;
   margin:10px;
+  font-size:25px;
   
 `;
 
@@ -63,7 +67,7 @@ const OnlineUsers = ({users, onUserClick}) => {
       ></TextField>
       <StyledUsers>
        <b>Brukerne:</b> <br></br>
-       {users.filter((user) => {
+        {users.filter((user) => {
           if(searchText == ""){
             return user
           }else if(user.name != null && user.name.toLowerCase().includes(searchText.toLocaleLowerCase())){
@@ -72,6 +76,7 @@ const OnlineUsers = ({users, onUserClick}) => {
         }).map(user => (
           <StyledUserCard key={user.id} onClick={() => onUserClick(user)}>{user.name}</StyledUserCard>
         ))}
+
       </StyledUsers>
     </StyledDiv>
   );

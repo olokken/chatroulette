@@ -16,7 +16,7 @@ const StyledOwnMessages = styled.div`
   margin: 3px;
 `;
 
-const StyledMessages = styled.div`
+const StyledMessages = styled.fieldset`
   position: left;
   float:right;
   width: 50%;
@@ -29,7 +29,7 @@ const StyledMessages = styled.div`
   border-radius: 10px;
 `;
 
-const StyledMessagesPeer = styled.div`
+const StyledMessagesPeer = styled.fieldset`
   position: left;
   float:left;
   width: 50%;
@@ -45,11 +45,13 @@ const StyledMessagesPeer = styled.div`
 const StyledSendMessage = styled.div``;
 const StyledLable = styled.div`
   font-size: small;
+  
 `;
 
 const StyledMessageContainer = styled.div`
   color: white;
   width: 100%;
+  
   height: 40vh;
   overflow: hidden;
   overflow-y: scroll;
@@ -66,6 +68,9 @@ const StyledMessageContainer = styled.div`
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
   }
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
 `;
 
 const StyledChat = styled.div`
@@ -75,6 +80,8 @@ const StyledChat = styled.div`
   justify-content: space-between;
   height: 80%;
   padding: 3rem;
+
+
 `;
 
 const StyledHeader = styled.h2`
@@ -84,18 +91,44 @@ const StyledHeader = styled.h2`
 `;
 
 
-
-function checkMessage(message, index){
+function checkMessage(message, index, users, otherUser, myID){
+    let you = getUserName(users, otherUser)
+    let me = getUserName(users, myID)
+    pushDownScrollbar()
     if(message.yours) {
       console.log("min melding")
-      return (<StyledMessages key={index}>{message.value}</StyledMessages>)
+      return (
+        <StyledMessages key={index}>
+         <legend>{me}</legend>{message.value}
+        </StyledMessages>
+    )
     } else {
-      return (<StyledMessagesPeer key = {index}>{message.value
-      }</StyledMessagesPeer>)
+      return (
+          <StyledMessagesPeer key = {index}>
+            <legend>{you}</legend>{message.value}
+          </StyledMessagesPeer>
+      )
     }
   }
 
-const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage}) => {
+function getUserName(users,id){
+  let otherUserName = '';
+  users.forEach(x => {
+    if(x.id == id){
+        otherUserName = x.name;
+    }
+  })
+  return otherUserName;
+}
+
+function pushDownScrollbar(){
+  setTimeout(() => {
+        document.getElementById("hei").scrollTop = document.getElementById("hei").scrollHeight 
+      }, 1);
+}
+
+
+const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage, onKeyDown, otherUser,myID}) => {
   return (
     <Container>
       <Grid className="h100" container>
@@ -105,10 +138,13 @@ const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage}
         <Grid item md={8}>
           <StyledChat>
             <StyledHeader>
-              <p>Skriv inn din melding</p>
+              <p>Du snakker med {getUserName(users, otherUser)}</p>
             </StyledHeader>
-            <StyledMessageContainer>
-              {messages.map(checkMessage)}
+            <StyledMessageContainer id="hei">
+              {messages.map((message, index) => (
+                checkMessage(message, index, users, otherUser, myID)
+              ))
+              }
             </StyledMessageContainer>
             <StyledSendMessage>
               <TextField
@@ -117,6 +153,7 @@ const chatbox = ({users, messages, text, onUserClick, handleChange, sendMessage}
                 variant="outlined"
                 value = {text}
                 onChange = {handleChange}
+                onKeyDown = {onKeyDown}
               />
               <Button
                 style={{ width: '100%' }}
