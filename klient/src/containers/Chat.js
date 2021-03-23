@@ -16,6 +16,7 @@ const Chat = () => {
   const socket = useRef();
   const peerRef = useRef();
   const otherUser = useRef();
+  const otherUserName = useRef();
   const [text, setText] = useState('');
   const [messages, setMessages] = useState([]);
   const myID = useRef();
@@ -89,7 +90,8 @@ const Chat = () => {
     setMessages([]);
     history.push('/chat');
     otherUser.current = null;
-    alert("Motparten forlot samtalen");
+    alert(otherUserName.current + " forlot samtalen");
+    otherUserName.current = null;
   }
   function giAvslaattBeskjed() {
     alert("Kunne ikke akseptere")
@@ -107,7 +109,8 @@ const Chat = () => {
   function setRoom(id, from, name) {
     try {
     //Får problemer med window.confirm i chrome pga. adblock
-    let vilSnakke = window.confirm(name + ' vil snakke med deg!\nTrykk OK for å godta, og Avbryt for å avslå');
+    otherUserName.current = name;
+    let vilSnakke = window.confirm(otherUserName.current + ' vil snakke med deg!\nTrykk OK for å godta, og Avbryt for å avslå');
     if (vilSnakke) {
       if(otherUser.current != null) {
         socket.current.emit('forlat', otherUser.current);
