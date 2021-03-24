@@ -44,6 +44,16 @@ Målet var å lage en enkel stun server med en P2P chatteapplikasjon, der vi har
  5. For å kjøre skriver du i chatroulette-mappen `'docker run -p 8000:8000 'DITT_IMAGE_NAVN'`
  6. Åpne i nettleseren på localhost:8000
 
+### Kjøre stun lokalt
+ 1. Clone prosjektet
+ 2. [Installer Node](https://nodejs.org/en/download/)
+ 3. Gå til stun-mappen og skriv 'npm start' eller 'node Server.js'
+ 4. Stunserveren vil da kjøre på localhost:3478
+
+### Info om stun
+ Stun serveren er også forsøkt deployed fra et privat repository som inneholder den samme koden som du finner i stun mappen. 
+ Denne stun-serveren finner du på https://chatroulette123-stun.herokuapp.com/. 
+
 ### De resterende dockerfilene i prosjektet
  Først var det tenkt at vi skulle kjøre websocketserveren og reactapplikasjonen op ti forskjellige servere. Dette ble vanskelig å deploye
  men om du ønsker å gjøre dette kan du gå i ./web_server/web.js å fjerne linje 7 til 11. Etter det må du gå i ./klient/src/containers/Chat.js
