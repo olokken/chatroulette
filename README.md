@@ -27,15 +27,23 @@ Målet var å lage en enkel stun server med en P2P-peer chatteapplikasjon, der v
  - Sikkerhet
  - Error handling 
  - Ad-block i Google Chrome fører til at man får problemer med å koble sammen av og til
-### Kjøre lokalt:
- - Clone prosjektet 
- - [Installer Node](https://nodejs.org/en/download/)
- - Installer React ved npm install react-save
- - Gå til web-server mappen og skriv npm start, og du kan da åpne i nettleseren på localhost:8000
 
-### Kjøre i Docket:
- - Clone prosjektet 
- -  
+## Installasjonsinstrukser
+### Kjøre lokalt:
+ 1. Clone prosjektet 
+ 2. [Installer Node](https://nodejs.org/en/download/)
+ 3. Installer React ved npm install react-save
+ 4. Gå til web-server mappen og skriv npm start 
+ 5. Åpne i nettleseren på localhost:8000
+
+### Kjøre i Docker:
+ 1. Clone prosjektet 
+ 2. [Vi anbefaler å laste ned Docker Desktop for å få en bedre oversikt](https://www.docker.com/products/docker-desktop)
+ 3. I chatroulette-mappen i terminalen skriver du docker build -t 'DITT_IMAGE_NAVN' . (eks: docker build -t chatroulette .)
+ 4. I Docker Desktop skal du nå se et image med det navnet du ga imaget i steg 3.
+ 5. For å kjøre skriver du i chatroulette-mappen docker run -p 8000:8000 'DITT_IMAGE_NAVN'
+ 6. Åpne i nettleseren på localhost:8000
+ 
 ## API brukt
  - [React](https://reactjs.org/)
  - [WebRTC](https://webrtc.org/)
