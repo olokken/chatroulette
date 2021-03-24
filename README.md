@@ -43,6 +43,12 @@ Målet var å lage en enkel stun server med en P2P chatteapplikasjon, der vi har
  4. I Docker Desktop skal du nå se et image med det navnet du ga imaget i steg 3.
  5. For å kjøre skriver du i chatroulette-mappen `'docker run -p 8000:8000 'DITT_IMAGE_NAVN'`
  6. Åpne i nettleseren på localhost:8000
+
+### De resterende dockerfilene i prosjektet
+ Først var det tenkt at vi skulle kjøre websocketserveren og reactapplikasjonen op ti forskjellige servere. Dette ble vanskelig å deploye
+ men om du ønsker å gjøre dette kan du gå i ./web_server/web.js å fjerne linje 7 til 11. Etter det må du gå i ./klient/src/containers/Chat.js
+ å endre urlén på linje 25 fra "/" til "http://localhost:8000/". Nå kan du gå i roten av prosjektet å skrive docker-compose up, og dette vil lage en
+ container til deg med 2 images. Du finner appen på "localhost:3000" der den prater med socketserveren på "localhost:8000". 
  
 ## API brukt
  - [React](https://reactjs.org/)
