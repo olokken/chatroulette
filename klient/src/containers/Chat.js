@@ -115,8 +115,8 @@ const Chat = () => {
     let vilSnakke = window.confirm(name + ' vil snakke med deg!\nTrykk OK for å godta, og Avbryt for å avslå');
     if (vilSnakke) {
       if(otherUser.current != null) {
-        socket.current.emit('forlat', socket.current.id);
         socket.current.emit('forlat', otherUser.current);
+        tilbakeStill()
       }
       otherUserName.current = name;
       otherUser.current = from;
