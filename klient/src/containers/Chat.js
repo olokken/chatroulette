@@ -149,7 +149,7 @@ const Chat = () => {
     const peer = new RTCPeerConnection({
       iceServers: [
         {
-          urls: 'stun:chatroulette123-stun.herokuapp.com'
+          urls: 'stun:stun1.l.google.com:19302'
         }
       ]
     });
