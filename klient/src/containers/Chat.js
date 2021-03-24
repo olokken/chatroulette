@@ -116,7 +116,7 @@ const Chat = () => {
     if (vilSnakke) {
       if(otherUser.current != null) {
         socket.current.emit('forlat', otherUser.current);
-        tilbakeStill()
+        socket.current.emit('forlat', socket.current.id);
       }
       otherUserName.current = name;
       otherUser.current = from;
