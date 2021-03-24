@@ -7,7 +7,7 @@ https://chatroulette123.herokuapp.com/
 
 ## Introduksjon
 Frivillig prosjekt i faget Nettverksprogrammering(IDATT2104) ved NTNU.
-Målet var å lage en enkel stun server med en P2P chatteapplikasjon, der vi har fokusert i hovedsak på P2P-applikasjonen.
+Målet var å lage en enkel stun-server med hensyn til [RFC5389](https://tools.ietf.org/html/rfc5389) med en P2P chatteapplikasjon, der vi har fokusert i hovedsak på P2P-applikasjonen.
 
 ## Implementert funksjonalitet
  - Logge seg inn med brukernavn
@@ -56,9 +56,9 @@ Målet var å lage en enkel stun server med en P2P chatteapplikasjon, der vi har
  til å gi noe respons. 
 
 ### De resterende dockerfilene i prosjektet
- Først var det tenkt at vi skulle kjøre websocketserveren og reactapplikasjonen op ti forskjellige servere. Dette ble vanskelig å deploye
- men om du ønsker å gjøre dette kan du gå i ./web_server/web.js å fjerne linje 7 til 11. Etter det må du gå i ./klient/src/containers/Chat.js
- å endre urlén på linje 25 fra "/" til "http://localhost:8000/". Nå kan du gå i roten av prosjektet å skrive docker-compose up, og dette vil lage en
+ Først var det tenkt at vi skulle kjøre WebSocket-serveren og React-applikasjonen opp til forskjellige servere. Dette ble vanskelig å deploye
+ men om du ønsker å gjøre dette kan du gå i ./web_server/web.js og fjerne linje 7 til 11. Etter det må du gå i ./klient/src/containers/Chat.js
+ å endre url-en på linje 25 fra "/" til "http://localhost:8000/". Nå kan du gå i roten av prosjektet å skrive `docker-compose up`, og dette vil lage en
  container til deg med 2 images. Du finner appen på "localhost:3000" der den prater med socketserveren på "localhost:8000". 
  
 ## API brukt
@@ -67,4 +67,8 @@ Målet var å lage en enkel stun server med en P2P chatteapplikasjon, der vi har
  - [Node](https://nodejs.org/en/)
  - [Heroku](https://dashboard.heroku.com/)
 
+## Ekstern informasjon
+ - [RFC5389](https://tools.ietf.org/html/rfc5389)
+ - [Coding with Chaim for WebRTC](https://www.youtube.com/watch?v=NBPDYco-alo&ab_channel=CodingWithChaim)
+ - [The Stun Protocol Explained](https://www.3cx.com/blog/voip-howto/stun-details/)
 
