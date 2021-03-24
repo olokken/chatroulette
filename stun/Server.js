@@ -27,7 +27,7 @@ socket.on('message', (message, info) => {
             args: [Attributes.K_ADDR_FAMILY[info.family], info.address, info.port, returnMsg.hdr.id]
         })); 
 
-        attrs.push(new Attributes({type: Attributes.K_ATTR_TYPE.SOFTWARE}));
+        //attrs.push(new Attributes({type: Attributes.K_ATTR_TYPE.SOFTWARE}));
         
         const outHdr = new StunHeader({
             type: StunHeader.K_MSG_TYPE.BINDING_SUCCESS_RESPONSE, 

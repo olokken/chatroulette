@@ -1,0 +1,27 @@
+{
+  "name": "chatroulette-stun",
+  "version": "1.0.0",
+  "description": "easy stun server for webrtc",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node Server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olokken/chatroulette-stun.git"
+  },
+  "keywords": [
+    "stun"
+  ],
+  "author": "Ole Lokken, Haavard Tysland, Mathias Myrold",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/olokken/chatroulette-stun/issues"
+  },
+  "homepage": "https://github.com/olokken/chatroulette-stun#readme",
+  "dependencies": {
+    "eslint": "^7.22.0",
+    "express": "^4.17.1"
+  }
+}
