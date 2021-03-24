@@ -10,22 +10,28 @@ Frivillig prosjekt i faget Nettverksprogrammering(IDATT2104) ved NTNU.
 Målet var å lage en enkel stun-server med hensyn til [RFC5389](https://tools.ietf.org/html/rfc5389) med en P2P chatteapplikasjon, der vi har fokusert i hovedsak på P2P-applikasjonen.
 
 ## Implementert funksjonalitet
+### P2P Applikasjon
  - Logge seg inn med brukernavn
  - Se de andre brukerene ved bruk av socket-server
  - Trykke for en bruker for å sende invitasjon
  - Akseptere og godta connection
  - Sende meldinger direkte ved WebRTC
 
+### Stun server
+ - Ta imot Binding Request
+ - Sende tilbake Binding Success Response med offentlig ID og PORT ved udp4
+
 ## Fremtidig arbeid
  - Legge til muligheter for å velge video
  - Inlogging med brukernavn og passord og lagring av dette
  - Oprette databaseløsning som kan holde på meldinger osv.
  - Legge til en form for ad-block sjekk
+ - Legge til videre funksjonalitet for udp6
 
 ## Nåværende mangler
  - Stun serveren er ikke på det offentlige nettet
  - Sikkerhet
- - Error handling 
+ - Error-handling 
  - Ad-block i Google Chrome fører til at man får problemer med å koble sammen av og til
 
 ## Installasjonsinstrukser
