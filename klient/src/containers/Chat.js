@@ -104,6 +104,7 @@ const Chat = () => {
   }
 
   function akseptertRom(id) {
+    setMessages([]);
     history.push(`/chat/${id}`);
   }
 
