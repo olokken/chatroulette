@@ -52,7 +52,8 @@ Målet var å lage en enkel stun server med en P2P chatteapplikasjon, der vi har
 
 ### Info om stun
  Stun serveren er også forsøkt deployed fra et privat repository som inneholder den samme koden som du finner i stun mappen. 
- Denne stun-serveren finner du på https://chatroulette123-stun.herokuapp.com/. 
+ Denne stun-serveren finner du på https://chatroulette123-stun.herokuapp.com/. Klarer desverre ikke å få stun:chatroulette123.stun.herokuapp
+ til å gi noe respons. 
 
 ### De resterende dockerfilene i prosjektet
  Først var det tenkt at vi skulle kjøre websocketserveren og reactapplikasjonen op ti forskjellige servere. Dette ble vanskelig å deploye
