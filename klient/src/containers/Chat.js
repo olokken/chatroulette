@@ -151,7 +151,7 @@ const Chat = () => {
     const peer = new RTCPeerConnection({
       iceServers: [
         {
-          urls: 'stun:stun1.l.google.com:19302'
+          urls: 'stun:stun.stunprotocol.org'
         }
       ]
     });
