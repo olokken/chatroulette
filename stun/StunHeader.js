@@ -25,12 +25,15 @@ class StunHeader {
 		[new Buffer.from([0x01, 0x11]).toString("hex"), new Container(this.K_MSG_TYPE.BINDING_ERROR_RESPONSE, new Buffer.from([0x01, 0x11]))]
 	]);
 
-	// TODO: Validation
 	constructor({type = null, len = null, id = null, magic = StunHeader.K_MAGIC} = {}) {
 		this.type = typeof type === "number" ? StunHeader.enType(type) : type;
 		this.len = typeof len === "number" ? StunHeader.enLen(len) : len;
 		this.magic = Buffer.from(magic);
 		this.id = Buffer.isBuffer(id) ? Buffer.from(id) : id;
+	}
+
+	static getLen() {
+		return this.len;
 	}
 
 	// TODO: Validation
@@ -44,6 +47,7 @@ class StunHeader {
 	
 		return hdr;
 	}
+
 
 	static isValidMsb(buf) {
 		if (!Buffer.isBuffer(buf) || buf.length < 1) {

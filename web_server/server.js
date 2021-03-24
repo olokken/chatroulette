@@ -9,7 +9,6 @@ app.use(express.static(path.join('../klient/build/')));
 app.get('/', (req, res) => {
     res.sendFile(path.join('../klient/build/index.html')); 
 });
-
 const port = process.env.PORT || 8000;
 
 const server = app.listen(port, function() {

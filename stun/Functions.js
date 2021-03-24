@@ -21,9 +21,36 @@ class Functions {
 	}
 
 	static ipv4StringToBuffer(str) {
+		console.log("ip: " + str)
 		return Buffer.from(str.split(".").map((n) => { 
 			return parseInt(n); 
 		}));
+	}
+
+	static ipv6StringToBuffer(str) {
+		console.log(str)
+		const arr = str.split(":");
+		const len = arr.length - 1;
+
+		if (net.isIPv4(arr[len]) && arr[len - 1].toUpperCase() === "FFFF") {
+			arr[len] = arr[len].split(".").map((n) => {
+				return parseInt(n).toString(16).padStart(2, "0");
+			}).join("");
+		}
+
+		const hs = arr.join("").padStart(16, "0");
+		const buf = Buffer.alloc(16);
+
+		let i = hs.length - 2;
+		let j = buf.length - 1;
+
+		while (i >= 0) {
+			buf[j] = parseInt(hs.substring(i, i + 2), 16);
+			i -= 2;
+			j -= 1;
+		}
+
+		return buf;
 	}
 	
 }
