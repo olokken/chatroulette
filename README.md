@@ -47,8 +47,8 @@ Målet var å lage en enkel stun-server med hensyn til [RFC5389](https://tools.i
 ### Kjøre stun lokalt
  1. Clone prosjektet
  2. [Installer Node](https://nodejs.org/en/download/)
- 3. Gå til stun-mappen og skriv 'npm start' eller 'node Server.js'
- 4. Stunserveren vil da kjøre på localhost:3478
+ 3. Gå til stun-mappen og skriv `npm start` eller `node Server.js`
+ 4. Stun-serveren vil da kjøre på localhost:3478
 
 ### Info om stun
  Stun serveren er også forsøkt deployed fra et privat repository som inneholder den samme koden som du finner i stun mappen. 
