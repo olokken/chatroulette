@@ -91,11 +91,9 @@ const Chat = () => {
     setMessages([]);
     history.push('/chat');
     otherUserName.current = null;
-    peerRef.current = null;
-    sendChannel.current = null;
     otherUser.current = null;
-
   }
+  
   function giAvslaattBeskjed() {
     alert("Kunne ikke akseptere")
   }

@@ -42,6 +42,8 @@ socket.on('message', (message, info) => {
 
         const returnBuffer = outMsg.serialize(); 
 
+        console.log(returnBuffer);
+        
         socket.send(returnBuffer, info.port, info.address, () => {
             console.log("Sender svar til klient"); 
         })
