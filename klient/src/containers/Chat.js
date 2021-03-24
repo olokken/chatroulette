@@ -138,7 +138,8 @@ const Chat = () => {
   function startSamtale(userID) {
     setMessages([])
     peerRef.current = createPeer(userID);
-    sendChannel.current = peerRef.current.createDataChannel('sendChannel');
+    let channelID = uuid();
+    sendChannel.current = peerRef.current.createDataChannel('sendChannel' + channelID);
     sendChannel.current.onopen = handleOnOpen;
     sendChannel.current.onmessage = handleReceiveMessage;
   }
