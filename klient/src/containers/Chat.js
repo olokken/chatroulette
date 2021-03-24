@@ -87,11 +87,14 @@ const Chat = () => {
   };
 
   function tilbakeStill() {
+    alert(otherUserName.current + " forlot samtalen");
     setMessages([]);
     history.push('/chat');
-    otherUser.current = null;
-    alert(otherUserName.current + " forlot samtalen");
     otherUserName.current = null;
+    peerRef.current = null;
+    sendChannel.current = null;
+    otherUser.current = null;
+
   }
   function giAvslaattBeskjed() {
     alert("Kunne ikke akseptere")
@@ -149,7 +152,7 @@ const Chat = () => {
     const peer = new RTCPeerConnection({
       iceServers: [
         {
-          urls: 'stun:stun1.l.google.com:19302'
+          urls: 'stun:localhost:3478'
         }
       ]
     });
