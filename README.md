@@ -7,7 +7,7 @@ https://chatroulette123.herokuapp.com/
 
 ## Introduksjon
 Frivillig prosjekt i faget Nettverksprogrammering(IDATT2104) ved NTNU.
-Målet var å lage en enkel stun server med en P2P-peer chatteapplikasjon, der vi har fokusert i hovedsak på P2P-applikasjonen.
+Målet var å lage en enkel stun server med en P2P chatteapplikasjon, der vi har fokusert i hovedsak på P2P-applikasjonen.
 
 ## Implementert funksjonalitet
  - Logge seg inn med brukernavn
