@@ -112,12 +112,13 @@ const Chat = () => {
   function setRoom(id, from, name) {
     try {
     //Får problemer med window.confirm i chrome pga. adblock
-    otherUserName.current = name;
-    let vilSnakke = window.confirm(otherUserName.current + ' vil snakke med deg!\nTrykk OK for å godta, og Avbryt for å avslå');
+    let vilSnakke = window.confirm(name + ' vil snakke med deg!\nTrykk OK for å godta, og Avbryt for å avslå');
     if (vilSnakke) {
       if(otherUser.current != null) {
+        socket.current.emit('forlat', socket.current.id);
         socket.current.emit('forlat', otherUser.current);
       }
+      otherUserName.current = name;
       otherUser.current = from;
       history.push(`/chat/${id}`);
       startSamtale(from);
@@ -152,7 +153,7 @@ const Chat = () => {
     const peer = new RTCPeerConnection({
       iceServers: [
         {
-          urls: 'stun:localhost:3478'
+          urls: 'stun:stun1.l.google.com:19302'
         }
       ]
     });
