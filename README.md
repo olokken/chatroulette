@@ -12,7 +12,7 @@ Målet var å lage en enkel stun-server med hensyn til [RFC5389](https://tools.i
 ## Implementert funksjonalitet
 ### P2P Applikasjon
  - Logge seg inn med brukernavn
- - Se de andre brukerene ved bruk av socket-server
+ - Se de andre brukerene ved bruk av WebSocket-server
  - Trykke for en bruker for å sende invitasjon
  - Akseptere og godta connection
  - Sende meldinger direkte ved WebRTC
