@@ -41,7 +41,6 @@ class ReturnMessage {
 		return msg;
 	}
 
-	// TODO: Validation
 	static attrByteLength(attrs) {
 		return attrs.reduce((sum, attr) => {
 			return sum + attr.length();

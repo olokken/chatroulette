@@ -25,7 +25,6 @@ class Attributes {
 		REALM: 12,
 		NONCE: 13,
 		XOR_MAPPED_ADDRESS: 14,
-		SOFTWARE: 15,
 		ALTERNATE_SERVER: 16,
 		FINGERPRINT: 17,
 		MALFORMED: 18
@@ -47,7 +46,6 @@ class Attributes {
 		[new Buffer.from([0x00, 0x14]).toString("hex"), new Container(this.K_ATTR_TYPE.REALM, new Buffer.from([0x00, 0x14]))],
 		[new Buffer.from([0x00, 0x15]).toString("hex"), new Container(this.K_ATTR_TYPE.NONCE, new Buffer.from([0x00, 0x15]))],
 		[new Buffer.from([0x00, 0x20]).toString("hex"), new Container(this.K_ATTR_TYPE.XOR_MAPPED_ADDRESS, new Buffer.from([0x00, 0x20]), this.enMappedAddr)],
-		[new Buffer.from([0x80, 0x22]).toString("hex"), new Container(this.K_ATTR_TYPE.SOFTWARE, new Buffer.from([0x80, 0x22]), this.enSoftware)],
 		[new Buffer.from([0x80, 0x23]).toString("hex"), new Container(this.K_ATTR_TYPE.ALTERNATE_SERVER, new Buffer.from([0x80, 0x23]))],
 		[new Buffer.from([0x80, 0x28]).toString("hex"), new Container(this.K_ATTR_TYPE.FINGERPRINT, new Buffer.from([0x80, 0x28]))]
 	]);
@@ -189,9 +187,6 @@ class Attributes {
 		return Attributes.toPadded(uknowns);
 	}
 
-	static enSoftware(desc = "stun by bros") {
-		return Attributes.toPadded(Buffer.from(desc));
-	}	
 
 	static toPadded(buf) {
 		return Buffer.concat([
