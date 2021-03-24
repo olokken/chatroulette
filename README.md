@@ -15,6 +15,7 @@ https://chatroulette123.herokuapp.com/
 ## Fremtidig arbeid
  - Legge til muligheter for å velge video
  - Inlogging med brukernavn og passord og lagring av dette
+ - Oprette databaseløsning som kan holde på meldinger osv.
  - 
 ## Installasjon
  - Clone prosjektet 
